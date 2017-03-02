@@ -1,6 +1,6 @@
 {
   "name": "mobxpromise",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Provides status and results from computed async calls as simple computed properties.",
   "keywords": ["mobx", "promise", "async", "computed"],
   "main": "dist/MobxPromise.js",
@@ -9,6 +9,10 @@
     "dist"
   ],
   "author": "Andy Dufilie <andy.dufilie@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adufilie/MobxPromise.git"
+  },
   "license": "MIT",
   "engines": {
     "node": ">=6.0.0"
