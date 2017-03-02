@@ -1,0 +1,103 @@
+{
+  "name": "mobxpromise",
+  "version": "0.0.4",
+  "description": "Provides status and results from computed async calls as simple computed properties.",
+  "keywords": ["mobx", "promise", "async", "computed"],
+  "main": "dist/MobxPromise.js",
+  "typings": "dist/types/MobxPromise.d.ts",
+  "files": [
+    "dist"
+  ],
+  "author": "Andy Dufilie <andy.dufilie@gmail.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "scripts": {
+    "lint": "tslint -e **/node_modules/** -e **/dist/** **/*.ts ",
+    "prebuild": "rimraf dist && rimraf docs",
+    "build": "cross-env NODE_ENV=production webpack",
+    "build:dev": "webpack",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:prod": "npm run lint && npm run test -- --coverage --no-cache",
+    "deploy-docs": "node tools/gh-pages-publish.js",
+    "report-coverage": "cat ./coverage/lcov.info | coveralls",
+    "commit": "git-cz",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "prepush": "npm run test:prod && npm run build",
+    "commitmsg": "validate-commit-msg"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-conventional-changelog"
+    },
+    "validate-commit-msg": {
+      "types": "conventional-commit-types",
+      "helpMessage": "Use \"npm run commit\" instead, we use conventional-changelog format :) (https://github.com/commitizen/cz-cli)"
+    }
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "modulePathIgnorePatterns": [
+      "/^((?!src).)/"
+    ],
+    "testResultsProcessor": "<rootDir>/node_modules/ts-jest/coverageprocessor.js",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/test/"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 90,
+        "functions": 95,
+        "lines": 95,
+        "statements": 95
+      }
+    }
+  },
+  "devDependencies": {
+    "@types/chai": "^3.4.35",
+    "@types/jest": "^18.1.1",
+    "@types/node": "^7.0.2",
+    "@types/sinon": "^1.16.35",
+    "chai": "^3.5.0",
+    "colors": "^1.1.2",
+    "commitizen": "^2.9.5",
+    "coveralls": "^2.11.15",
+    "cross-env": "^3.1.4",
+    "cz-conventional-changelog": "^2.0.0",
+    "husky": "^0.13.1",
+    "jest": "^19.0.2",
+    "prompt": "^1.0.0",
+    "replace-in-file": "^2.3.2",
+    "semantic-release": "^6.3.2",
+    "sinon": "^1.17.7",
+    "ts-jest": "^19.0.0",
+    "ts-loader": "^2.0.0",
+    "ts-node": "^2.0.0",
+    "tslint": "^4.3.1",
+    "tslint-react": "^2.4.0",
+    "typedoc": "^0.5.5",
+    "typedoc-webpack-plugin": "^1.1.3",
+    "validate-commit-msg": "^2.10.1"
+  },
+  "dependencies": {
+    "@types/webpack": "^2.2.7",
+    "babel-core": "^6.22.1",
+    "babel-loader": "^6.2.10",
+    "babel-preset-es2015": "^6.22.0",
+    "mobx": "^3.1.2",
+    "rimraf": "^2.5.4",
+    "typescript": "^2.2.1",
+    "webpack": "^2.2.1"
+  }
+}
