@@ -133,7 +133,6 @@ __decorate([
 __decorate([
     action
 ], MobxPromiseImpl.prototype, "setError", null);
-// This type casting provides more information for TypeScript code flow analysis
 export const MobxPromise = MobxPromiseImpl;
 export default MobxPromise;
 //# sourceMappingURL=MobxPromise.js.map

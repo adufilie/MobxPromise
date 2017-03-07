@@ -173,5 +173,7 @@ export declare const MobxPromise: {
         result: R;
         error: undefined;
     };
-} & typeof MobxPromiseImpl;
+};
+export interface MobxPromise<T> extends Pick<MobxPromiseImpl<T>, 'status' | 'error' | 'result' | 'isPending' | 'isError' | 'isComplete'> {
+}
 export default MobxPromise;

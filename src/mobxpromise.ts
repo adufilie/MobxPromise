@@ -176,10 +176,13 @@ export class MobxPromiseImpl<R>
 	}
 }
 
-// This type casting provides more information for TypeScript code flow analysis
-export const MobxPromise = MobxPromiseImpl as any as {
-	new<R>(input:MobxPromiseInputParamsWithDefault<R>): MobxPromiseUnionTypeWithDefault<R>;
-	new<R>(input:MobxPromiseInputUnion<R>, defaultResult: R): MobxPromiseUnionTypeWithDefault<R>;
-	new<R>(input:MobxPromiseInputUnion<R>): MobxPromiseUnionType<R>;
-} & typeof MobxPromiseImpl;
+export const MobxPromise = MobxPromiseImpl as {
+	// This provides more information for TypeScript code flow analysis
+	new <R>(input:MobxPromiseInputParamsWithDefault<R>): MobxPromiseUnionTypeWithDefault<R>;
+	new <R>(input:MobxPromiseInputUnion<R>, defaultResult: R): MobxPromiseUnionTypeWithDefault<R>;
+	new <R>(input:MobxPromiseInputUnion<R>): MobxPromiseUnionType<R>;
+};
+export interface MobxPromise<T> extends Pick<MobxPromiseImpl<T>, 'status' | 'error' | 'result' | 'isPending' | 'isError' | 'isComplete'>
+{
+}
 export default MobxPromise;

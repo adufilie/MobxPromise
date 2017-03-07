@@ -1,19 +1,19 @@
 {
   "name": "mobxpromise",
-  "version": "0.0.7",
-  "description": "Provides status and results from computed async calls as simple computed properties.",
-  "keywords": [
-    "mobx",
-    "promise",
-    "async",
-    "computed"
-  ],
+  "version": "0.0.11",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist",
     "README.md",
     "LICENSE"
+  ],
+  "description": "Provides an observable interface for a computed promise.",
+  "keywords": [
+    "mobx",
+    "promise",
+    "async",
+    "computed"
   ],
   "author": "Andy Dufilie <andy.dufilie@gmail.com>",
   "repository": {
