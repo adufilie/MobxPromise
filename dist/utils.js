@@ -1,5 +1,12 @@
 import { computed, extras } from 'mobx';
 import { MobxPromise } from "./MobxPromise";
+/**
+ * A decorator for creating a <code>@computed</code> property that will be cached
+ * after the first time it is accessed, even if it becomes unobserved later.
+ * @param target
+ * @param propertyKey
+ * @param descriptor
+ */
 export function cached(target, propertyKey, descriptor) {
     if (descriptor.get) {
         let firstTime = true;

@@ -1,6 +1,13 @@
 import {computed, extras, IComputedValue} from 'mobx';
 import {MobxPromise} from "./MobxPromise";
 
+/**
+ * A decorator for creating a <code>@computed</code> property that will be cached
+ * after the first time it is accessed, even if it becomes unobserved later.
+ * @param target
+ * @param propertyKey
+ * @param descriptor
+ */
 export function cached<T>(target: any, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>)
 {
 	if (descriptor.get)
