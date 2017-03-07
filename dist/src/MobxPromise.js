@@ -1,16 +1,18 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-import { observable, action } from "mobx";
-import { cached } from "./utils";
+Object.defineProperty(exports, "__esModule", { value: true });
+const mobx_1 = require("mobx");
+const utils_1 = require("./utils");
 /**
  * MobxPromise provides an observable interface for a computed promise.
  * @author adufilie http://github.com/adufilie
  */
-export class MobxPromiseImpl {
+class MobxPromiseImpl {
     constructor(input, defaultResult) {
         this.invokeId = 0;
         this._latestInvokeId = 0;
@@ -95,44 +97,45 @@ export class MobxPromiseImpl {
     }
 }
 __decorate([
-    observable
+    mobx_1.observable
 ], MobxPromiseImpl.prototype, "internalStatus", void 0);
 __decorate([
-    observable.ref
+    mobx_1.observable.ref
 ], MobxPromiseImpl.prototype, "internalResult", void 0);
 __decorate([
-    observable.ref
+    mobx_1.observable.ref
 ], MobxPromiseImpl.prototype, "internalError", void 0);
 __decorate([
-    cached
+    utils_1.cached
 ], MobxPromiseImpl.prototype, "status", null);
 __decorate([
-    cached
+    utils_1.cached
 ], MobxPromiseImpl.prototype, "isPending", null);
 __decorate([
-    cached
+    utils_1.cached
 ], MobxPromiseImpl.prototype, "isComplete", null);
 __decorate([
-    cached
+    utils_1.cached
 ], MobxPromiseImpl.prototype, "isError", null);
 __decorate([
-    cached
+    utils_1.cached
 ], MobxPromiseImpl.prototype, "result", null);
 __decorate([
-    cached
+    utils_1.cached
 ], MobxPromiseImpl.prototype, "error", null);
 __decorate([
-    cached
+    utils_1.cached
 ], MobxPromiseImpl.prototype, "latestInvokeId", null);
 __decorate([
-    action
+    mobx_1.action
 ], MobxPromiseImpl.prototype, "setPending", null);
 __decorate([
-    action
+    mobx_1.action
 ], MobxPromiseImpl.prototype, "setComplete", null);
 __decorate([
-    action
+    mobx_1.action
 ], MobxPromiseImpl.prototype, "setError", null);
-export const MobxPromise = MobxPromiseImpl;
-export default MobxPromise;
+exports.MobxPromiseImpl = MobxPromiseImpl;
+exports.MobxPromise = MobxPromiseImpl;
+exports.default = exports.MobxPromise;
 //# sourceMappingURL=MobxPromise.js.map

@@ -17,7 +17,7 @@ export function cached<T>(target: any, propertyKey: string | symbol, descriptor:
 		descriptor.get = function(...args:any[]) {
 			if (firstTime)
 			{
-				const computed = extras.getAtom(target, propertyKey as string) as any as IComputedValue<any>;
+				const computed = extras.getAtom(this, propertyKey as string) as any as IComputedValue<any>;
 				computed.observe(function() { /*noop*/ });
 				firstTime = false;
 			}

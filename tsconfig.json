@@ -4,7 +4,7 @@
         "sourceMap": true,
         "noImplicitAny": true,
         "strictNullChecks": true,
-        "module": "es6",
+        "module": "commonjs",
         "target": "es6",
         "experimentalDecorators": true,
         "moduleResolution": "node",
@@ -15,13 +15,5 @@
             ]
         },
         "declaration": true
-    },
-    "include": [
-        "./src/**/*"
-    ],
-    "exclude": [
-        "test",
-        "node_modules",
-        "webpack.config.ts"
-    ]
+    }
 }
