@@ -1,10 +1,10 @@
 {
     "compilerOptions": {
-        "outDir": "types",
+        "outDir": "dist",
         "sourceMap": true,
         "noImplicitAny": true,
         "strictNullChecks": true,
-        "module": "commonjs",
+        "module": "es6",
         "target": "es6",
         "experimentalDecorators": true,
         "moduleResolution": "node",
@@ -15,5 +15,10 @@
             ]
         },
         "declaration": true
-    }
+    },
+    "exclude": [
+        "test",
+        "node_modules",
+        "webpack.config.ts"
+    ]
 }

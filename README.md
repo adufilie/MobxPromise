@@ -31,15 +31,10 @@ When the promise resolves, the MP's `status` is set to `"complete"` unless the p
 has become stale or members of the `await` collection no longer have a `status` of `"complete"`.
 The computed promise becomes stale when observable dependencies of the `invoke` function have
 changed. Promises which become stale before being resolved will never set the status or result 
-of the MP and will thus have no influence on the application.
-
-Thanks to
+of the MP and will thus have no influence on the application. Thanks to
 [MobX](https://github.com/mobxjs/mobx),
 the `invoke` method will only be called again when its referenced observables have changed.
-Note that in order for this caching to take place, you must either reference the MP's 
-properties in the `render()` function of an
-[observer component](https://mobx.js.org/refguide/observer-component.html)
-or set up a reaction that accesses the MP's properties. 
+
 
 ## Acknowledgements
 

@@ -173,10 +173,5 @@ export declare const MobxPromise: {
         result: R;
         error: undefined;
     };
-};
+} & typeof MobxPromiseImpl;
 export default MobxPromise;
-/**
- * Update MobxPromise debug names to reflect their property names on a given object.
- * @param target An object which has properties that are MobxPromises.
- */
-export declare function labelMobxPromises<T extends object>(target: T): void;

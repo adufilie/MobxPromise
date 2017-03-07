@@ -1,4 +1,5 @@
-import {computed, observable, action, extras} from "mobx";
+import {observable, action, extras} from "mobx";
+import {cached} from "./utils";
 
 /**
  * This tagged union type describes the interoperability of MobxPromise properties.
@@ -93,7 +94,7 @@ export class MobxPromiseImpl<R>
 	@observable.ref private internalResult?:R = undefined;
 	@observable.ref private internalError?:Error = undefined;
 
-	@computed get status():'pending'|'complete'|'error'
+	@cached get status():'pending'|'complete'|'error'
 	{
 		// wait until all MobxPromise dependencies are complete
 		if (this.await)
@@ -107,11 +108,11 @@ export class MobxPromiseImpl<R>
 		return status;
 	}
 
-	@computed get isPending() { return this.status == 'pending'; }
-	@computed get isComplete() { return this.status == 'complete'; }
-	@computed get isError() { return this.status == 'error'; }
+	@cached get isPending() { return this.status == 'pending'; }
+	@cached get isComplete() { return this.status == 'complete'; }
+	@cached get isError() { return this.status == 'error'; }
 
-	@computed get result():R|undefined
+	@cached get result():R|undefined
 	{
 		// checking status may trigger invoke
 		if (this.isError || this.internalResult == null)
@@ -120,7 +121,7 @@ export class MobxPromiseImpl<R>
 		return this.internalResult;
 	}
 
-	@computed get error():Error|undefined
+	@cached get error():Error|undefined
 	{
 		// checking status may trigger invoke
 		if (this.isError && this.await)
@@ -135,7 +136,7 @@ export class MobxPromiseImpl<R>
 	 * This lets mobx determine when to call this.invoke(),
 	 * taking advantage of caching based on observable property access tracking.
 	 */
-	@computed private get latestInvokeId()
+	@cached private get latestInvokeId()
 	{
 		window.clearTimeout(this._latestInvokeId);
 		let promise = this.invoke();
@@ -176,26 +177,9 @@ export class MobxPromiseImpl<R>
 }
 
 // This type casting provides more information for TypeScript code flow analysis
-export const MobxPromise = MobxPromiseImpl as {
+export const MobxPromise = MobxPromiseImpl as any as {
 	new<R>(input:MobxPromiseInputParamsWithDefault<R>): MobxPromiseUnionTypeWithDefault<R>;
 	new<R>(input:MobxPromiseInputUnion<R>, defaultResult: R): MobxPromiseUnionTypeWithDefault<R>;
 	new<R>(input:MobxPromiseInputUnion<R>): MobxPromiseUnionType<R>;
-};
+} & typeof MobxPromiseImpl;
 export default MobxPromise;
-
-/**
- * Update MobxPromise debug names to reflect their property names on a given object.
- * @param target An object which has properties that are MobxPromises.
- */
-export function labelMobxPromises<T extends object>(target:T)
-{
-	for (let key in target)
-	{
-		let desc = Object.getOwnPropertyDescriptor(target, key);
-		if (desc.value instanceof MobxPromise)
-		{
-			let admin = extras.getAdministration(desc.value);
-			admin.name = `${key}(${admin.name})`;
-		}
-	}
-}
