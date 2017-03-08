@@ -38,7 +38,7 @@ export type MobxPromiseInputParams<R> = {
 	 */
 	reaction?: (result?:R) => void,
 };
-export type MobxPromise_await = () => Array<MobxPromiseImpl<any> | MobxPromiseUnionType<any> | MobxPromiseUnionTypeWithDefault<any>>;
+export type MobxPromise_await = () => Array<MobxPromiseUnionTypeWithDefault<any> | MobxPromiseUnionType<any> | MobxPromise<any>>;
 export type MobxPromise_invoke<R> = () => PromiseLike<R>;
 export type MobxPromiseInputParamsWithDefault<R> = {
 	await?: MobxPromise_await,
@@ -189,7 +189,9 @@ export const MobxPromise = MobxPromiseImpl as {
 	new <R>(input:MobxPromiseInputUnion<R>, defaultResult: R): MobxPromiseUnionTypeWithDefault<R>;
 	new <R>(input:MobxPromiseInputUnion<R>): MobxPromiseUnionType<R>;
 };
+
 export interface MobxPromise<T> extends Pick<MobxPromiseImpl<T>, 'status' | 'error' | 'result' | 'isPending' | 'isError' | 'isComplete'>
 {
 }
+
 export default MobxPromise;

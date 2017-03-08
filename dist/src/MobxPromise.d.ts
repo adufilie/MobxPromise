@@ -65,7 +65,7 @@ export declare type MobxPromiseInputParams<R> = {
      */
     reaction?: (result?: R) => void;
 };
-export declare type MobxPromise_await = () => Array<MobxPromiseImpl<any> | MobxPromiseUnionType<any> | MobxPromiseUnionTypeWithDefault<any>>;
+export declare type MobxPromise_await = () => Array<MobxPromiseUnionTypeWithDefault<any> | MobxPromiseUnionType<any> | MobxPromise<any>>;
 export declare type MobxPromise_invoke<R> = () => PromiseLike<R>;
 export declare type MobxPromiseInputParamsWithDefault<R> = {
     await?: MobxPromise_await;

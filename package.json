@@ -1,14 +1,8 @@
 {
   "name": "mobxpromise",
-  "version": "0.0.16",
+  "version": "1.0.1",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",
-  "files": [
-    "dist",
-    "src",
-    "README.md",
-    "LICENSE"
-  ],
   "description": "Provides an observable interface for a computed promise.",
   "keywords": [
     "mobx",
