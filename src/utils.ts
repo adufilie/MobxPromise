@@ -1,5 +1,5 @@
 import {computed, extras, IComputedValue} from 'mobx';
-import {MobxPromise} from "./MobxPromise";
+import {MobxPromise, MobxPromiseInputUnion, MobxPromiseImpl, MobxPromiseFactory} from "./MobxPromise";
 
 /**
  * A decorator for creating a <code>@computed</code> property that will be cached
@@ -42,4 +42,21 @@ export function labelMobxPromises<T extends object>(target:T)
 			admin.name = `${key}(${admin.name})`;
 		}
 	}
+}
+
+/**
+ * Creates a function which constructs a MobxPromise that will pass the result and default values through a given function.
+ * For example, this can be used to make results immutable.
+ * @param resultModifier
+ * @returns {(input:MobxPromiseInputUnion<R>, defaultResult?:R)=>MobxPromiseUnionType<R>}
+ */
+export function createMobxPromiseFactory(resultModifier: <R>(result:R) => R):MobxPromiseFactory
+{
+	return function<R>(input:MobxPromiseInputUnion<R>, defaultResult?: R) {
+		input = MobxPromiseImpl.normalizeInput(input, defaultResult);
+		const invoke = input.invoke;
+		input.invoke = () => invoke().then(resultModifier);
+		input.default = resultModifier(input.default);
+		return new MobxPromise(input);
+	};
 }

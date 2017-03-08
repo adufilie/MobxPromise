@@ -176,6 +176,13 @@ export class MobxPromiseImpl<R>
 	}
 }
 
+export type MobxPromiseFactory = {
+	// This provides more information for TypeScript code flow analysis
+	<R>(input:MobxPromiseInputParamsWithDefault<R>):MobxPromiseUnionTypeWithDefault<R>;
+	<R>(input:MobxPromiseInputUnion<R>, defaultResult: R):MobxPromiseUnionTypeWithDefault<R>;
+	<R>(input:MobxPromiseInputUnion<R>):MobxPromiseUnionType<R>;
+};
+
 export const MobxPromise = MobxPromiseImpl as {
 	// This provides more information for TypeScript code flow analysis
 	new <R>(input:MobxPromiseInputParamsWithDefault<R>): MobxPromiseUnionTypeWithDefault<R>;

@@ -39,4 +39,20 @@ function labelMobxPromises(target) {
     }
 }
 exports.labelMobxPromises = labelMobxPromises;
+/**
+ * Creates a function which constructs a MobxPromise that will pass the result and default values through a given function.
+ * For example, this can be used to make results immutable.
+ * @param resultModifier
+ * @returns {(input:MobxPromiseInputUnion<R>, defaultResult?:R)=>MobxPromiseUnionType<R>}
+ */
+function createMobxPromiseFactory(resultModifier) {
+    return function (input, defaultResult) {
+        input = MobxPromise_1.MobxPromiseImpl.normalizeInput(input, defaultResult);
+        const invoke = input.invoke;
+        input.invoke = () => invoke().then(resultModifier);
+        input.default = resultModifier(input.default);
+        return new MobxPromise_1.MobxPromise(input);
+    };
+}
+exports.createMobxPromiseFactory = createMobxPromiseFactory;
 //# sourceMappingURL=utils.js.map

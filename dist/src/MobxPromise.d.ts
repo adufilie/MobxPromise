@@ -106,6 +106,11 @@ export declare class MobxPromiseImpl<R> {
     private setComplete(invokeId, result);
     private setError(invokeId, error);
 }
+export declare type MobxPromiseFactory = {
+    <R>(input: MobxPromiseInputParamsWithDefault<R>): MobxPromiseUnionTypeWithDefault<R>;
+    <R>(input: MobxPromiseInputUnion<R>, defaultResult: R): MobxPromiseUnionTypeWithDefault<R>;
+    <R>(input: MobxPromiseInputUnion<R>): MobxPromiseUnionType<R>;
+};
 export declare const MobxPromise: {
     new <R>(input: MobxPromiseInputParamsWithDefault<R>): {
         status: "pending";

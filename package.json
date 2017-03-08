@@ -1,6 +1,6 @@
 {
   "name": "mobxpromise",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",
   "files": [
