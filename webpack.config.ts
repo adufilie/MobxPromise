@@ -1,44 +1,50 @@
-import {join} from 'path';
-import {optimize} from 'webpack';
-const TypedocWebpackPlugin = require('typedoc-webpack-plugin');
+import {join} from 'path'
+const {camelCase} = require('lodash')
+const {TsConfigPathsPlugin, CheckerPlugin} = require('awesome-typescript-loader')
+const TypedocWebpackPlugin = require('typedoc-webpack-plugin')
 
 /**
  * Update this variable if you change your library name
  */
-const libraryName = 'mobxpromise';
+const libraryName = 'index'
 
 export default {
 	entry: join(__dirname, `src/${libraryName}.ts`),
+	// Currently cheap-module-source-map is broken https://github.com/webpack/webpack/issues/4176
 	devtool: 'source-map',
 	output: {
 		path: join(__dirname, 'dist'),
 		libraryTarget: 'umd',
-		library: libraryName,
+		library: camelCase(libraryName),
 		filename: `${libraryName}.js`
 	},
 	resolve: {
 		extensions: ['.ts', '.js']
 	},
 	module: {
-		rules: [{
-			test: /\.tsx?$/,
-			use: [
-				{
-					loader: 'babel-loader',
-					options: {presets: ['es2015']}
-				},
-				{
-					loader: 'ts-loader'
+		loaders: [
+			{
+				test: /\.tsx?$/,
+				exclude: /node_modules/,
+				loader: 'awesome-typescript-loader',
+			},
+			{
+				test: /\.js$/,
+				exclude: /node_modules/,
+				loader: 'babel',
+				query: {
+					presets: ['es2015', 'react'],
+					plugins: ['transform-decorators-legacy', 'transform-class-properties'],
 				}
-			],
-			exclude: [
-				join(__dirname, 'node_modules'),
-				join(__dirname, 'test')
-			]
-		}]
+			}
+		]
+	},
+	externals: {
+		mobx: 'mobx'
 	},
 	plugins: [
-		new optimize.UglifyJsPlugin({sourceMap: true}),
+		new CheckerPlugin(),
+		new TsConfigPathsPlugin(),
 		new TypedocWebpackPlugin(
 			{
 				theme: 'minimal',
@@ -49,4 +55,4 @@ export default {
 			'src'
 		)
 	]
-};
+}

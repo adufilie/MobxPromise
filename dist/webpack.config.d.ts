@@ -4,25 +4,29 @@ declare var _default: {
     output: {
         path: string;
         libraryTarget: string;
-        library: string;
+        library: any;
         filename: string;
     };
     resolve: {
         extensions: string[];
     };
     module: {
-        rules: {
+        loaders: ({
             test: RegExp;
-            use: ({
-                loader: string;
-                options: {
-                    presets: string[];
-                };
-            } | {
-                loader: string;
-            })[];
-            exclude: string[];
-        }[];
+            exclude: RegExp;
+            loader: string;
+        } | {
+            test: RegExp;
+            exclude: RegExp;
+            loader: string;
+            query: {
+                presets: string[];
+                plugins: string[];
+            };
+        })[];
+    };
+    externals: {
+        mobx: string;
     };
     plugins: any[];
 };
