@@ -914,6 +914,9 @@ img { max-width: 100%; }
 			<a href="_utils_.html#createmobxpromisefactory" class="tsd-kind-icon">create<wbr>Mobx<wbr>Promise<wbr>Factory</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
+			<a href="_utils_.html#debounceasync" class="tsd-kind-icon">debounce<wbr>Async</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
 			<a href="_utils_.html#labelmobxpromises" class="tsd-kind-icon">label<wbr>Mobx<wbr>Promises</a>
 		</li>
 	</ul>
@@ -931,6 +934,7 @@ img { max-width: 100%; }
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter"><a href="_utils_.html#cached" class="tsd-kind-icon">cached</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_utils_.html#createmobxpromisefactory" class="tsd-kind-icon">create<wbr>Mobx<wbr>Promise<wbr>Factory</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter"><a href="_utils_.html#debounceasync" class="tsd-kind-icon">debounce<wbr>Async</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter"><a href="_utils_.html#labelmobxpromises" class="tsd-kind-icon">label<wbr>Mobx<wbr>Promises</a></li>
 						</ul>
 					</section>
@@ -949,7 +953,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/57fb53a/src/utils.ts#L11">utils.ts:11</a></li>
+								<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/9a7de5f/src/utils.ts#L11">utils.ts:11</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -992,7 +996,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/57fb53a/src/utils.ts#L53">utils.ts:53</a></li>
+								<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/9a7de5f/src/utils.ts#L53">utils.ts:53</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1036,6 +1040,48 @@ img { max-width: 100%; }
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
+				<a name="debounceasync" class="tsd-anchor"></a>
+				<h3>debounce<wbr>Async</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
+					<li class="tsd-signature tsd-kind-icon">debounce<wbr>Async&lt;R, F&gt;<span class="tsd-signature-symbol">(</span>invoke<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">F</span>, delay<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">F</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/9a7de5f/src/utils.ts#L69">utils.ts:69</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>A function created with debounceAsync() returns a new Promise
+									every time, but only the last promise created before invoking the
+								original function will be resolved after a specified delay.</p>
+							</div>
+						</div>
+						<h4 class="tsd-type-parameters-title">Type parameters</h4>
+						<ul class="tsd-type-parameters">
+							<li>
+								<h4>R</h4>
+							</li>
+							<li>
+								<h4>F<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span></h4>
+							</li>
+						</ul>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>invoke: <span class="tsd-signature-type">F</span></h5>
+							</li>
+							<li>
+								<h5><span class="tsd-flag ts-flagDefault value">Default value</span> delay: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;0</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">F</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
 				<a name="labelmobxpromises" class="tsd-anchor"></a>
 				<h3>label<wbr>Mobx<wbr>Promises</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
@@ -1045,7 +1091,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/57fb53a/src/utils.ts#L34">utils.ts:34</a></li>
+								<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/9a7de5f/src/utils.ts#L34">utils.ts:34</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">

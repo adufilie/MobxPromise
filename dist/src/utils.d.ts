@@ -19,3 +19,9 @@ export declare function labelMobxPromises<T extends object>(target: T): void;
  * @returns {(input:MobxPromiseInputUnion<R>, defaultResult?:R)=>MobxPromiseUnionType<R>}
  */
 export declare function createMobxPromiseFactory(resultModifier: <R>(result: R) => R): MobxPromiseFactory;
+/**
+ * A function created with debounceAsync() returns a new Promise
+ * every time, but only the last promise created before invoking the
+ * original function will be resolved after a specified delay.
+ */
+export declare function debounceAsync<R, F extends (...args: any[]) => PromiseLike<R>>(invoke: F, delay?: number): F;

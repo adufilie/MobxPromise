@@ -362,6 +362,34 @@ function createMobxPromiseFactory(resultModifier) {
     };
 }
 exports.createMobxPromiseFactory = createMobxPromiseFactory;
+/**
+ * A function created with debounceAsync() returns a new Promise
+ * every time, but only the last promise created before invoking the
+ * original function will be resolved after a specified delay.
+ */
+function debounceAsync(invoke) {
+    var delay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
+    function invokeLater(context, args, resolve, reject) {
+        try {
+            resolve(invoke.apply(context, args));
+        } catch (e) {
+            reject(e);
+        }
+    }
+    var timeout = 0;
+    return function () {
+        for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+            args[_key2] = arguments[_key2];
+        }
+
+        return new Promise(function (resolve, reject) {
+            window.clearTimeout(timeout);
+            timeout = window.setTimeout(invokeLater, delay, this, args, resolve, reject);
+        });
+    };
+}
+exports.debounceAsync = debounceAsync;
 
 /***/ }),
 /* 2 */
