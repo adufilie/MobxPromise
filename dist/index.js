@@ -337,7 +337,7 @@ exports.cached = cached;
 function labelMobxPromises(target) {
     for (var key in target) {
         var desc = Object.getOwnPropertyDescriptor(target, key);
-        if (desc.value instanceof MobxPromise_1.MobxPromise) {
+        if (desc && desc.value instanceof MobxPromise_1.MobxPromise) {
             var admin = mobx_1.extras.getAdministration(desc.value);
             admin.name = key + "(" + admin.name + ")";
         }

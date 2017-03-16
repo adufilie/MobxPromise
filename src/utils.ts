@@ -36,7 +36,7 @@ export function labelMobxPromises<T extends object>(target:T)
 	for (let key in target)
 	{
 		let desc = Object.getOwnPropertyDescriptor(target, key);
-		if (desc.value instanceof MobxPromise)
+		if (desc && desc.value instanceof MobxPromise)
 		{
 			let admin = extras.getAdministration(desc.value);
 			admin.name = `${key}(${admin.name})`;
