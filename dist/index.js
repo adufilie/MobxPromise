@@ -118,7 +118,8 @@ var MobxPromiseImpl = function () {
         this.await = input.await;
         this.invoke = input.invoke;
         this.defaultResult = input.default;
-        this.reaction = input.reaction;
+        this.onResult = input.onResult;
+        this.onError = input.onError;
     }
 
     _createClass(MobxPromiseImpl, [{
@@ -141,7 +142,7 @@ var MobxPromiseImpl = function () {
                 this.internalResult = result;
                 this.internalError = undefined;
                 this.internalStatus = 'complete';
-                if (this.reaction) this.reaction(this.result);
+                if (this.onResult) this.onResult(this.result); // may use defaultResult
             }
         }
     }, {
@@ -151,6 +152,7 @@ var MobxPromiseImpl = function () {
                 this.internalError = error;
                 this.internalResult = undefined;
                 this.internalStatus = 'error';
+                if (this.onError) this.onError(error);
             }
         }
     }, {
@@ -163,10 +165,12 @@ var MobxPromiseImpl = function () {
                 var _iteratorError = undefined;
 
                 try {
-                    for (var _iterator = this.await()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                        var mobxPromise = _step.value;
+                    for (var _iterator = this.await().map(function (mp) {
+                        return mp.status;
+                    })[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                        var _status = _step.value;
 
-                        if (!mobxPromise.isComplete) return mobxPromise.status;
+                        if (_status !== 'complete') return _status;
                     }
                 } catch (err) {
                     _didIteratorError = true;
@@ -218,10 +222,12 @@ var MobxPromiseImpl = function () {
                 var _iteratorError2 = undefined;
 
                 try {
-                    for (var _iterator2 = this.await()[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                        var mobxPromise = _step2.value;
+                    for (var _iterator2 = this.await().map(function (mp) {
+                        return mp.error;
+                    })[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                        var error = _step2.value;
 
-                        if (mobxPromise.error) return mobxPromise.error;
+                        if (error) return error;
                     }
                 } catch (err) {
                     _didIteratorError2 = true;
@@ -333,6 +339,14 @@ function cached(target, propertyKey, descriptor) {
 }
 exports.cached = cached;
 /**
+ * Checks if a property has observers.
+ */
+function hasObservers(thing, property) {
+    var tree = mobx_1.extras.getObserverTree(thing, property);
+    return tree && tree.observers ? tree.observers.length > 0 : false;
+}
+exports.hasObservers = hasObservers;
+/**
  * Update MobxPromise debug names to reflect their property names on a given object.
  * @param target An object which has properties that are MobxPromises.
  */
@@ -346,24 +360,6 @@ function labelMobxPromises(target) {
     }
 }
 exports.labelMobxPromises = labelMobxPromises;
-/**
- * Creates a function which constructs a MobxPromise that will pass the result and default values through a given function.
- * For example, this can be used to make results immutable.
- * @param resultModifier
- * @returns {(input:MobxPromiseInputUnion<R>, defaultResult?:R)=>MobxPromiseUnionType<R>}
- */
-function createMobxPromiseFactory(resultModifier) {
-    return function (input, defaultResult) {
-        input = MobxPromise_1.MobxPromiseImpl.normalizeInput(input, defaultResult);
-        var invoke = input.invoke;
-        input.invoke = function () {
-            return invoke().then(resultModifier);
-        };
-        input.default = resultModifier(input.default);
-        return new MobxPromise_1.MobxPromise(input);
-    };
-}
-exports.createMobxPromiseFactory = createMobxPromiseFactory;
 /**
  * A function created with debounceAsync() returns a new Promise
  * every time, but only the last promise created before invoking the

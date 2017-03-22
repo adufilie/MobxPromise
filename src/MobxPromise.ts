@@ -1,18 +1,18 @@
-import {observable, action, extras} from "mobx";
+import {observable, action} from "mobx";
 import {cached} from "./utils";
 
 /**
  * This tagged union type describes the interoperability of MobxPromise properties.
  */
 export type MobxPromiseUnionType<R> = (
-	{ status: 'pending', isPending: true, isError: false, isComplete: false, result: undefined, error: undefined } |
-	{ status: 'error', isPending: false, isError: true, isComplete: false, result: undefined, error: Error } |
-	{ status: 'complete', isPending: false, isError: false, isComplete: true, result: R, error: undefined }
+	{ status: 'pending',  isPending: true,  isError: false, isComplete: false, result: R|undefined, error: Error|undefined } |
+	{ status: 'error',    isPending: false, isError: true,  isComplete: false, result: R|undefined, error: Error           } |
+	{ status: 'complete', isPending: false, isError: false, isComplete: true,  result: R,           error: Error|undefined }
 );
 export type MobxPromiseUnionTypeWithDefault<R> = (
-	{ status: 'pending', isPending: true, isError: false, isComplete: false, result: R, error: undefined } |
-	{ status: 'error', isPending: false, isError: true, isComplete: false, result: R, error: Error } |
-	{ status: 'complete', isPending: false, isError: false, isComplete: true, result: R, error: undefined }
+	{ status: 'pending',  isPending: true,  isError: false, isComplete: false, result: R, error: Error|undefined } |
+	{ status: 'error',    isPending: false, isError: true,  isComplete: false, result: R, error: Error           } |
+	{ status: 'complete', isPending: false, isError: false, isComplete: true,  result: R, error: Error|undefined }
 );
 
 export type MobxPromiseInputUnion<R> = PromiseLike<R> | (() => PromiseLike<R>) | MobxPromiseInputParams<R>;
@@ -36,7 +36,13 @@ export type MobxPromiseInputParams<R> = {
 	 * A function that will be called when the latest promise from invoke() is resolved.
 	 * It will not be called for out-of-date promises.
 	 */
-	reaction?: (result?:R) => void,
+	onResult?: (result?:R) => void,
+
+	/**
+	 * A function that will be called when the latest promise from invoke() is rejected.
+	 * It will not be called for out-of-date promises.
+	 */
+	onError?: (error:Error) => void,
 };
 export type MobxPromise_await = () => Array<MobxPromiseUnionTypeWithDefault<any> | MobxPromiseUnionType<any> | MobxPromise<any>>;
 export type MobxPromise_invoke<R> = () => PromiseLike<R>;
@@ -44,7 +50,8 @@ export type MobxPromiseInputParamsWithDefault<R> = {
 	await?: MobxPromise_await,
 	invoke: MobxPromise_invoke<R>,
 	default: R,
-	reaction?: (result:R) => void,
+	onResult?: (result:R) => void,
+	onError?: (error:Error) => void,
 };
 
 /**
@@ -58,8 +65,9 @@ export class MobxPromiseImpl<R>
 		return value != null && typeof value === 'object' && typeof value.then === 'function';
 	}
 
-	static normalizeInput<R>(input:MobxPromiseInputParamsWithDefault<R>):MobxPromiseInputParamsWithDefault<R>
-	static normalizeInput<R>(input:MobxPromiseInputUnion<R>, defaultResult:R):MobxPromiseInputParamsWithDefault<R>
+	static normalizeInput<R>(input:MobxPromiseInputParamsWithDefault<R>):MobxPromiseInputParamsWithDefault<R>;
+	static normalizeInput<R>(input:MobxPromiseInputUnion<R>, defaultResult:R):MobxPromiseInputParamsWithDefault<R>;
+	static normalizeInput<R>(input:MobxPromiseInputUnion<R>):MobxPromiseInputParams<R>;
 	static normalizeInput<R>(input:MobxPromiseInputUnion<R>, defaultResult?:R)
 	{
 		if (typeof input === 'function')
@@ -80,12 +88,14 @@ export class MobxPromiseImpl<R>
 		this.await = input.await;
 		this.invoke = input.invoke;
 		this.defaultResult = input.default;
-		this.reaction = input.reaction;
+		this.onResult = input.onResult;
+		this.onError = input.onError;
 	}
 
 	private await?:MobxPromise_await;
 	private invoke:MobxPromise_invoke<R>;
-	private reaction?:(result?:R) => void;
+	private onResult?:(result?:R) => void;
+	private onError?:(error:Error) => void;
 	private defaultResult?:R;
 	private invokeId:number = 0;
 	private _latestInvokeId:number = 0;
@@ -98,9 +108,9 @@ export class MobxPromiseImpl<R>
 	{
 		// wait until all MobxPromise dependencies are complete
 		if (this.await)
-			for (let mobxPromise of this.await())
-				if (!mobxPromise.isComplete)
-					return mobxPromise.status;
+			for (let status of this.await().map(mp => mp.status)) // track all statuses before returning
+				if (status !== 'complete')
+					return status;
 
 		let status = this.internalStatus; // force mobx to track changes to internalStatus
 		if (this.latestInvokeId != this.invokeId)
@@ -125,9 +135,9 @@ export class MobxPromiseImpl<R>
 	{
 		// checking status may trigger invoke
 		if (!this.isComplete && this.await)
-			for (let mobxPromise of this.await())
-				if (mobxPromise.error)
-					return mobxPromise.error;
+			for (let error of this.await().map(mp => mp.error)) // track all errors before returning
+				if (error)
+					return error;
 
 		return this.internalError;
 	}
@@ -162,8 +172,8 @@ export class MobxPromiseImpl<R>
 			this.internalError = undefined;
 			this.internalStatus = 'complete';
 
-			if (this.reaction)
-				this.reaction(this.result);
+			if (this.onResult)
+				this.onResult(this.result); // may use defaultResult
 		}
 	}
 
@@ -174,6 +184,9 @@ export class MobxPromiseImpl<R>
 			this.internalError = error;
 			this.internalResult = undefined;
 			this.internalStatus = 'error';
+
+			if (this.onError)
+				this.onError(error);
 		}
 	}
 }

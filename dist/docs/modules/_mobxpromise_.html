@@ -983,7 +983,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">Mobx<wbr>Promise<wbr>Factory<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/dcec983/src/MobxPromise.ts#L181">MobxPromise.ts:181</a></li>
+						<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/dc61aa7/src/MobxPromise.ts#L194">MobxPromise.ts:194</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -1055,7 +1055,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">Mobx<wbr>Promise<wbr>Input<wbr>Params<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/dcec983/src/MobxPromise.ts#L19">MobxPromise.ts:19</a></li>
+						<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/dc61aa7/src/MobxPromise.ts#L19">MobxPromise.ts:19</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -1086,7 +1086,34 @@ img { max-width: 100%; }
 							</div>
 						</li>
 						<li class="tsd-parameter">
-							<h5><span class="tsd-flag ts-flagOptional">Optional</span> reaction<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span></h5>
+							<h5><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Error<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span></h5>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A function that will be called when the latest promise from invoke() is rejected.
+									It will not be called for out-of-date promises.</p>
+								</div>
+							</div>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter-siganture">
+									<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-variable tsd-is-not-exported">
+										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>error<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+									</ul>
+									<ul class="tsd-descriptions">
+										<li class="tsd-description">
+											<h4 class="tsd-parameters-title">Parameters</h4>
+											<ul class="tsd-parameters">
+												<li>
+													<h5>error: <span class="tsd-signature-type">Error</span></h5>
+												</li>
+											</ul>
+											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						<li class="tsd-parameter">
+							<h5><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Result<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span></h5>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>A function that will be called when the latest promise from invoke() is resolved.
@@ -1121,7 +1148,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">Mobx<wbr>Promise<wbr>Input<wbr>Params<wbr>With<wbr>Default<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/dcec983/src/MobxPromise.ts#L43">MobxPromise.ts:43</a></li>
+						<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/dc61aa7/src/MobxPromise.ts#L49">MobxPromise.ts:49</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -1137,7 +1164,28 @@ img { max-width: 100%; }
 							<h5>invoke<span class="tsd-signature-symbol">: </span><a href="_mobxpromise_.html#mobxpromise_invoke" class="tsd-signature-type">MobxPromise_invoke</a></h5>
 						</li>
 						<li class="tsd-parameter">
-							<h5><span class="tsd-flag ts-flagOptional">Optional</span> reaction<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span></h5>
+							<h5><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Error<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span></h5>
+							<ul class="tsd-parameters">
+								<li class="tsd-parameter-siganture">
+									<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-variable tsd-is-not-exported">
+										<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>error<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+									</ul>
+									<ul class="tsd-descriptions">
+										<li class="tsd-description">
+											<h4 class="tsd-parameters-title">Parameters</h4>
+											<ul class="tsd-parameters">
+												<li>
+													<h5>error: <span class="tsd-signature-type">Error</span></h5>
+												</li>
+											</ul>
+											<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						<li class="tsd-parameter">
+							<h5><span class="tsd-flag ts-flagOptional">Optional</span> on<wbr>Result<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">function</span></h5>
 							<ul class="tsd-parameters">
 								<li class="tsd-parameter-siganture">
 									<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-variable tsd-is-not-exported">
@@ -1166,7 +1214,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">Mobx<wbr>Promise<wbr>Input<wbr>Union<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">PromiseLike</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol"> | </span><a href="_mobxpromise_.html#mobxpromiseinputparams" class="tsd-signature-type">MobxPromiseInputParams</a></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/dcec983/src/MobxPromise.ts#L18">MobxPromise.ts:18</a></li>
+						<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/dc61aa7/src/MobxPromise.ts#L18">MobxPromise.ts:18</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -1176,7 +1224,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">Mobx<wbr>Promise<wbr>Union<wbr>Type<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">object</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/dcec983/src/MobxPromise.ts#L7">MobxPromise.ts:7</a></li>
+						<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/dc61aa7/src/MobxPromise.ts#L7">MobxPromise.ts:7</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -1191,7 +1239,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">Mobx<wbr>Promise<wbr>Union<wbr>Type<wbr>With<wbr>Default<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">object</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/dcec983/src/MobxPromise.ts#L12">MobxPromise.ts:12</a></li>
+						<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/dc61aa7/src/MobxPromise.ts#L12">MobxPromise.ts:12</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -1201,7 +1249,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">Mobx<wbr>Promise_<wbr>await<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/dcec983/src/MobxPromise.ts#L41">MobxPromise.ts:41</a></li>
+						<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/dc61aa7/src/MobxPromise.ts#L47">MobxPromise.ts:47</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -1226,7 +1274,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">Mobx<wbr>Promise_<wbr>invoke<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/dcec983/src/MobxPromise.ts#L42">MobxPromise.ts:42</a></li>
+						<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/dc61aa7/src/MobxPromise.ts#L48">MobxPromise.ts:48</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">

@@ -6,14 +6,14 @@ export declare type MobxPromiseUnionType<R> = ({
     isPending: true;
     isError: false;
     isComplete: false;
-    result: undefined;
-    error: undefined;
+    result: R | undefined;
+    error: Error | undefined;
 } | {
     status: 'error';
     isPending: false;
     isError: true;
     isComplete: false;
-    result: undefined;
+    result: R | undefined;
     error: Error;
 } | {
     status: 'complete';
@@ -21,7 +21,7 @@ export declare type MobxPromiseUnionType<R> = ({
     isError: false;
     isComplete: true;
     result: R;
-    error: undefined;
+    error: Error | undefined;
 });
 export declare type MobxPromiseUnionTypeWithDefault<R> = ({
     status: 'pending';
@@ -29,7 +29,7 @@ export declare type MobxPromiseUnionTypeWithDefault<R> = ({
     isError: false;
     isComplete: false;
     result: R;
-    error: undefined;
+    error: Error | undefined;
 } | {
     status: 'error';
     isPending: false;
@@ -43,7 +43,7 @@ export declare type MobxPromiseUnionTypeWithDefault<R> = ({
     isError: false;
     isComplete: true;
     result: R;
-    error: undefined;
+    error: Error | undefined;
 });
 export declare type MobxPromiseInputUnion<R> = PromiseLike<R> | (() => PromiseLike<R>) | MobxPromiseInputParams<R>;
 export declare type MobxPromiseInputParams<R> = {
@@ -63,7 +63,12 @@ export declare type MobxPromiseInputParams<R> = {
      * A function that will be called when the latest promise from invoke() is resolved.
      * It will not be called for out-of-date promises.
      */
-    reaction?: (result?: R) => void;
+    onResult?: (result?: R) => void;
+    /**
+     * A function that will be called when the latest promise from invoke() is rejected.
+     * It will not be called for out-of-date promises.
+     */
+    onError?: (error: Error) => void;
 };
 export declare type MobxPromise_await = () => Array<MobxPromiseUnionTypeWithDefault<any> | MobxPromiseUnionType<any> | MobxPromise<any>>;
 export declare type MobxPromise_invoke<R> = () => PromiseLike<R>;
@@ -71,7 +76,8 @@ export declare type MobxPromiseInputParamsWithDefault<R> = {
     await?: MobxPromise_await;
     invoke: MobxPromise_invoke<R>;
     default: R;
-    reaction?: (result: R) => void;
+    onResult?: (result: R) => void;
+    onError?: (error: Error) => void;
 };
 /**
  * MobxPromise provides an observable interface for a computed promise.
@@ -81,10 +87,12 @@ export declare class MobxPromiseImpl<R> {
     static isPromiseLike(value?: Partial<PromiseLike<any>>): boolean;
     static normalizeInput<R>(input: MobxPromiseInputParamsWithDefault<R>): MobxPromiseInputParamsWithDefault<R>;
     static normalizeInput<R>(input: MobxPromiseInputUnion<R>, defaultResult: R): MobxPromiseInputParamsWithDefault<R>;
+    static normalizeInput<R>(input: MobxPromiseInputUnion<R>): MobxPromiseInputParams<R>;
     constructor(input: MobxPromiseInputUnion<R>, defaultResult?: R);
     private await?;
     private invoke;
-    private reaction?;
+    private onResult?;
+    private onError?;
     private defaultResult?;
     private invokeId;
     private _latestInvokeId;
@@ -118,7 +126,7 @@ export declare const MobxPromise: {
         isError: false;
         isComplete: false;
         result: R;
-        error: undefined;
+        error: Error | undefined;
     } | {
         status: "error";
         isPending: false;
@@ -132,7 +140,7 @@ export declare const MobxPromise: {
         isError: false;
         isComplete: true;
         result: R;
-        error: undefined;
+        error: Error | undefined;
     };
     new <R>(input: MobxPromiseInputUnion<R>, defaultResult: R): {
         status: "pending";
@@ -140,7 +148,7 @@ export declare const MobxPromise: {
         isError: false;
         isComplete: false;
         result: R;
-        error: undefined;
+        error: Error | undefined;
     } | {
         status: "error";
         isPending: false;
@@ -154,21 +162,21 @@ export declare const MobxPromise: {
         isError: false;
         isComplete: true;
         result: R;
-        error: undefined;
+        error: Error | undefined;
     };
     new <R>(input: MobxPromiseInputUnion<R>): {
         status: "pending";
         isPending: true;
         isError: false;
         isComplete: false;
-        result: undefined;
-        error: undefined;
+        result: R | undefined;
+        error: Error | undefined;
     } | {
         status: "error";
         isPending: false;
         isError: true;
         isComplete: false;
-        result: undefined;
+        result: R | undefined;
         error: Error;
     } | {
         status: "complete";
@@ -176,7 +184,7 @@ export declare const MobxPromise: {
         isError: false;
         isComplete: true;
         result: R;
-        error: undefined;
+        error: Error | undefined;
     };
 };
 export interface MobxPromise<T> extends Pick<MobxPromiseImpl<T>, 'status' | 'error' | 'result' | 'isPending' | 'isError' | 'isComplete'> {

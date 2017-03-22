@@ -910,11 +910,11 @@ img { max-width: 100%; }
 		<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
 			<a href="_utils_.html#cached" class="tsd-kind-icon">cached</a>
 		</li>
-		<li class=" tsd-kind-function tsd-parent-kind-external-module">
-			<a href="_utils_.html#createmobxpromisefactory" class="tsd-kind-icon">create<wbr>Mobx<wbr>Promise<wbr>Factory</a>
-		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
 			<a href="_utils_.html#debounceasync" class="tsd-kind-icon">debounce<wbr>Async</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
+			<a href="_utils_.html#hasobservers" class="tsd-kind-icon">has<wbr>Observers</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
 			<a href="_utils_.html#labelmobxpromises" class="tsd-kind-icon">label<wbr>Mobx<wbr>Promises</a>
@@ -933,8 +933,8 @@ img { max-width: 100%; }
 						<h3>Functions</h3>
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter"><a href="_utils_.html#cached" class="tsd-kind-icon">cached</a></li>
-							<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_utils_.html#createmobxpromisefactory" class="tsd-kind-icon">create<wbr>Mobx<wbr>Promise<wbr>Factory</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter"><a href="_utils_.html#debounceasync" class="tsd-kind-icon">debounce<wbr>Async</a></li>
+							<li class="tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter"><a href="_utils_.html#hasobservers" class="tsd-kind-icon">has<wbr>Observers</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter"><a href="_utils_.html#labelmobxpromises" class="tsd-kind-icon">label<wbr>Mobx<wbr>Promises</a></li>
 						</ul>
 					</section>
@@ -953,7 +953,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/dcec983/src/utils.ts#L11">utils.ts:11</a></li>
+								<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/dc61aa7/src/utils.ts#L11">utils.ts:11</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -986,59 +986,6 @@ img { max-width: 100%; }
 					</li>
 				</ul>
 			</section>
-			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
-				<a name="createmobxpromisefactory" class="tsd-anchor"></a>
-				<h3>create<wbr>Mobx<wbr>Promise<wbr>Factory</h3>
-				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-					<li class="tsd-signature tsd-kind-icon">create<wbr>Mobx<wbr>Promise<wbr>Factory<span class="tsd-signature-symbol">(</span>resultModifier<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">function</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_mobxpromise_.html#mobxpromisefactory" class="tsd-signature-type">MobxPromiseFactory</a></li>
-				</ul>
-				<ul class="tsd-descriptions">
-					<li class="tsd-description">
-						<aside class="tsd-sources">
-							<ul>
-								<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/dcec983/src/utils.ts#L53">utils.ts:53</a></li>
-							</ul>
-						</aside>
-						<div class="tsd-comment tsd-typography">
-							<div class="lead">
-								<p>Creates a function which constructs a MobxPromise that will pass the result and default values through a given function.
-								For example, this can be used to make results immutable.</p>
-							</div>
-						</div>
-						<h4 class="tsd-parameters-title">Parameters</h4>
-						<ul class="tsd-parameters">
-							<li>
-								<h5>resultModifier: <span class="tsd-signature-type">function</span></h5>
-								<ul class="tsd-parameters">
-									<li class="tsd-parameter-siganture">
-										<ul class="tsd-signatures tsd-kind-type-literal tsd-has-type-parameter tsd-is-not-exported">
-											<li class="tsd-signature tsd-kind-icon">&lt;R&gt;<span class="tsd-signature-symbol">(</span>result<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">R</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">R</span></li>
-										</ul>
-										<ul class="tsd-descriptions">
-											<li class="tsd-description">
-												<h4 class="tsd-type-parameters-title">Type parameters</h4>
-												<ul class="tsd-type-parameters">
-													<li>
-														<h4>R</h4>
-													</li>
-												</ul>
-												<h4 class="tsd-parameters-title">Parameters</h4>
-												<ul class="tsd-parameters">
-													<li>
-														<h5>result: <span class="tsd-signature-type">R</span></h5>
-													</li>
-												</ul>
-												<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">R</span></h4>
-											</li>
-										</ul>
-									</li>
-								</ul>
-							</li>
-						</ul>
-						<h4 class="tsd-returns-title">Returns <a href="_mobxpromise_.html#mobxpromisefactory" class="tsd-signature-type">MobxPromiseFactory</a></h4>
-					</li>
-				</ul>
-			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
 				<a name="debounceasync" class="tsd-anchor"></a>
 				<h3>debounce<wbr>Async</h3>
@@ -1049,7 +996,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/dcec983/src/utils.ts#L69">utils.ts:69</a></li>
+								<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/dc61aa7/src/utils.ts#L61">utils.ts:61</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -1082,6 +1029,43 @@ img { max-width: 100%; }
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
+				<a name="hasobservers" class="tsd-anchor"></a>
+				<h3>has<wbr>Observers</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
+					<li class="tsd-signature tsd-kind-icon">has<wbr>Observers&lt;T&gt;<span class="tsd-signature-symbol">(</span>thing<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span>, property<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">keyof T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/dc61aa7/src/utils.ts#L33">utils.ts:33</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Checks if a property has observers.</p>
+							</div>
+						</div>
+						<h4 class="tsd-type-parameters-title">Type parameters</h4>
+						<ul class="tsd-type-parameters">
+							<li>
+								<h4>T</h4>
+							</li>
+						</ul>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>thing: <span class="tsd-signature-type">T</span></h5>
+							</li>
+							<li>
+								<h5>property: <span class="tsd-signature-type">keyof T</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
 				<a name="labelmobxpromises" class="tsd-anchor"></a>
 				<h3>label<wbr>Mobx<wbr>Promises</h3>
 				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module tsd-has-type-parameter">
@@ -1091,7 +1075,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/dcec983/src/utils.ts#L34">utils.ts:34</a></li>
+								<li>Defined in <a href="https://github.com/adufilie/MobxPromise/blob/dc61aa7/src/utils.ts#L43">utils.ts:43</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
