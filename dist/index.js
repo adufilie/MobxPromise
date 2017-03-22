@@ -139,6 +139,7 @@ var MobxPromiseImpl = function () {
         value: function setComplete(invokeId, result) {
             if (invokeId === this.invokeId) {
                 this.internalResult = result;
+                this.internalError = undefined;
                 this.internalStatus = 'complete';
                 if (this.reaction) this.reaction(this.result);
             }
@@ -148,6 +149,7 @@ var MobxPromiseImpl = function () {
         value: function setError(invokeId, error) {
             if (invokeId === this.invokeId) {
                 this.internalError = error;
+                this.internalResult = undefined;
                 this.internalStatus = 'error';
             }
         }
@@ -210,7 +212,7 @@ var MobxPromiseImpl = function () {
         key: "error",
         get: function get() {
             // checking status may trigger invoke
-            if (this.isError && this.await) {
+            if (!this.isComplete && this.await) {
                 var _iteratorNormalCompletion2 = true;
                 var _didIteratorError2 = false;
                 var _iteratorError2 = undefined;
@@ -219,7 +221,7 @@ var MobxPromiseImpl = function () {
                     for (var _iterator2 = this.await()[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
                         var mobxPromise = _step2.value;
 
-                        if (mobxPromise.isError) return mobxPromise.error;
+                        if (mobxPromise.error) return mobxPromise.error;
                     }
                 } catch (err) {
                     _didIteratorError2 = true;

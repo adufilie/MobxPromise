@@ -124,9 +124,9 @@ export class MobxPromiseImpl<R>
 	@cached get error():Error|undefined
 	{
 		// checking status may trigger invoke
-		if (this.isError && this.await)
+		if (!this.isComplete && this.await)
 			for (let mobxPromise of this.await())
-				if (mobxPromise.isError)
+				if (mobxPromise.error)
 					return mobxPromise.error;
 
 		return this.internalError;
@@ -159,6 +159,7 @@ export class MobxPromiseImpl<R>
 		if (invokeId === this.invokeId)
 		{
 			this.internalResult = result;
+			this.internalError = undefined;
 			this.internalStatus = 'complete';
 
 			if (this.reaction)
@@ -171,6 +172,7 @@ export class MobxPromiseImpl<R>
 		if (invokeId === this.invokeId)
 		{
 			this.internalError = error;
+			this.internalResult = undefined;
 			this.internalStatus = 'error';
 		}
 	}
