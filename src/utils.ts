@@ -12,15 +12,11 @@ export function cached<T>(target: any, propertyKey: string | symbol, descriptor:
 {
 	if (descriptor.get)
 	{
-		let firstTime = true;
 		let get = descriptor.get;
 		descriptor.get = function(...args:any[]) {
-			if (firstTime)
-			{
-				const computed = extras.getAtom(this, propertyKey as string) as any as IComputedValue<any>;
+			const computed = extras.getAtom(this, propertyKey as string) as any as IComputedValue<any>;
+			if (computed.observers.length === 0)
 				computed.observe(function() { /*noop*/ });
-				firstTime = false;
-			}
 			return get.apply(this, args);
 		};
 	}

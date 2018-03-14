@@ -69,4 +69,31 @@ describe('MobxPromise', () => {
 
 		return true;
 	});
+
+	it('will not keep calling invoke when not observed', async () => {
+		let value = mobx.observable(INITIAL);
+		let params = {
+			invoke: spy(async () => value.get()),
+			default: DEFAULT,
+			reaction: spy((result:string) => null)
+		};
+		let mp = new MobxPromise(params);
+
+		assert.equal(mp.result, DEFAULT, 'result matches default value when first requested');
+		return new Promise((resolve, reject) => {
+			setTimeout(() => {
+				try
+				{
+					let callCount = params.invoke.callCount;
+					assert.equal(mp.result, value.get(), 'result using latest value');
+					assert.equal(params.invoke.callCount, callCount, 'not invoked again');
+					resolve(true);
+				}
+				catch (error)
+				{
+					reject(error);
+				}
+			}, 200);
+		});
+	});
 });
