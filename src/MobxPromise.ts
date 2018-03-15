@@ -60,13 +60,13 @@ export type MobxPromiseInputParamsWithDefault<R> = {
  */
 export class MobxPromiseImpl<R>
 {
-	static isPromiseLike(value?:Partial<PromiseLike<any>>)
+	static isPromiseLike(value:any)
 	{
 		return value != null && typeof value === 'object' && typeof value.then === 'function';
 	}
 
 	static normalizeInput<R>(input:MobxPromiseInputParamsWithDefault<R>):MobxPromiseInputParamsWithDefault<R>;
-	static normalizeInput<R>(input:MobxPromiseInputUnion<R>, defaultResult:R):MobxPromiseInputParamsWithDefault<R>;
+	static normalizeInput<R>(input:MobxPromiseInputUnion<R>, defaultResult?:R):MobxPromiseInputParamsWithDefault<R>;
 	static normalizeInput<R>(input:MobxPromiseInputUnion<R>):MobxPromiseInputParams<R>;
 	static normalizeInput<R>(input:MobxPromiseInputUnion<R>, defaultResult?:R)
 	{
@@ -84,12 +84,12 @@ export class MobxPromiseImpl<R>
 
 	constructor(input:MobxPromiseInputUnion<R>, defaultResult?:R)
 	{
-		input = MobxPromiseImpl.normalizeInput(input, defaultResult);
-		this.await = input.await;
-		this.invoke = input.invoke;
-		this.defaultResult = input.default;
-		this.onResult = input.onResult;
-		this.onError = input.onError;
+		let norm = MobxPromiseImpl.normalizeInput(input, defaultResult);
+		this.await = norm.await;
+		this.invoke = norm.invoke;
+		this.defaultResult = norm.default;
+		this.onResult = norm.onResult;
+		this.onError = norm.onError;
 	}
 
 	private await?:MobxPromise_await;

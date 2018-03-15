@@ -22,7 +22,7 @@ export default {
 		extensions: ['.ts', '.js']
 	},
 	module: {
-		loaders: [
+		rules: [
 			{
 				test: /\.tsx?$/,
 				exclude: /node_modules/,
@@ -44,7 +44,7 @@ export default {
 	},
 	plugins: [
 		new CheckerPlugin(),
-		new TsConfigPathsPlugin(),
+		new TsConfigPathsPlugin()/*,
 		new TypedocWebpackPlugin(
 			{
 				theme: 'minimal',
@@ -53,6 +53,6 @@ export default {
 				ignoreCompilerErrors: true
 			},
 			'src'
-		)
+		)*/
 	]
 }

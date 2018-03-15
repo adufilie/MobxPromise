@@ -1,4 +1,4 @@
-import {computed, extras, IComputedValue} from 'mobx';
+import {computed, extras, IComputedValue, IListenable, IObservable} from 'mobx';
 import {MobxPromise} from "./MobxPromise";
 
 /**
@@ -14,8 +14,9 @@ export function cached<T>(target: any, propertyKey: string | symbol, descriptor:
 	{
 		let get = descriptor.get;
 		descriptor.get = function(...args:any[]) {
-			const computed = extras.getAtom(this, propertyKey as string) as any as IComputedValue<any>;
-			if (computed.observers.length === 0)
+			const computed = extras.getAtom(this, propertyKey as string) as IObservable & IListenable;
+			// to keep the cached value, add an observer if there are none
+			if (computed.observers && computed.observers.length === 0)
 				computed.observe(function() { /*noop*/ });
 			return get.apply(this, args);
 		};
