@@ -44,7 +44,7 @@ export default {
 	},
 	plugins: [
 		new CheckerPlugin(),
-		new TsConfigPathsPlugin()/*,
+		new TsConfigPathsPlugin(),
 		new TypedocWebpackPlugin(
 			{
 				theme: 'minimal',
@@ -53,6 +53,6 @@ export default {
 				ignoreCompilerErrors: true
 			},
 			'src'
-		)*/
+		)
 	]
 }
