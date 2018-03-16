@@ -82,6 +82,27 @@ export class MobxPromiseImpl<R>
 		return input;
 	}
 
+	static all<R>(
+		promises:MobxPromise<R>[],
+		options?: {
+			default?:R[],
+			onResult?:MobxPromiseInputParams<R[]>["onResult"],
+			onError?:MobxPromiseInputParams<R[]>["onError"]
+		}
+	):MobxPromiseImpl<R[]> {
+		let await_:MobxPromise_await|undefined;
+		if (promises.length) {
+			await_ = () => promises;
+		}
+		return new MobxPromiseImpl<R[]>({
+			await:await_,
+			invoke: () => Promise.resolve(promises.map(promise=>promise.result)),
+			default: options.default,
+			onResult: options.onResult,
+			onError: options.onError
+		});
+	}
+
 	constructor(input:MobxPromiseInputUnion<R>, defaultResult?:R)
 	{
 		let norm = MobxPromiseImpl.normalizeInput(input, defaultResult);

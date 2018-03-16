@@ -96,4 +96,81 @@ describe('MobxPromise', () => {
 			}, 200);
 		});
 	});
+
+	describe("MobxPromise.all", () => {
+		it("gives correct results for empty array input", (done) => {
+			MobxPromise.all([], {
+				onResult:r => {
+					assert.deepEqual(r, [], "result should be empty array");
+					done();
+				},
+				onError:e => {
+					throw new Error("break test!");
+				}
+			}).result; // reference result to invoke promise
+		});
+		it("gives correct results for one promise input", (done) => {
+			const promise = MobxPromise.all([
+				new MobxPromise({
+					invoke:() => Promise.resolve("whatsup")
+				})
+			], {
+				default:["default"],
+				onResult:r => {
+					assert.deepEqual(r, ["whatsup"]);
+					done();
+				},
+				onError:e => {
+					throw new Error("break test!");
+				}
+			});
+			assert.deepEqual(promise.result, ["default"]); // checking .result invokes the promise
+		});
+		it("awaits the given promises and invokes, returning the array of their results in order, and having given default result", () => {
+			const promise = MobxPromise.all([
+				new MobxPromise({
+					invoke:() => Promise.resolve("hello")
+				}),
+				new MobxPromise({
+					invoke:() => Promise.resolve("hi")
+				}),
+				new MobxPromise({
+					invoke:() => Promise.resolve("bye")
+				})
+			], {
+				default:["default"],
+				onResult:r => {
+					assert.deepEqual(r, ["hello", "hi" ,"bye"]);
+					done();
+				},
+				onError:e => {
+					throw new Error("break test!");
+				}
+			});
+			assert.deepEqual(promise.result, ["default"]); // checking .result invokes the promise
+		});
+		it("errors if any of the given promises error", () => {
+			const promise = MobxPromise.all([
+				new MobxPromise({
+					invoke:() => Promise.reject("oh no!!")
+				}),
+				new MobxPromise({
+					invoke:() => Promise.resolve("hi")
+				}),
+				new MobxPromise({
+					invoke:() => Promise.resolve("bye")
+				})
+			], {
+				default:["default"],
+				onResult:r => {
+					throw new Error("break test!");
+				},
+				onError:e => {
+					assert.equal(e.message, "oh no!!");
+					done();
+				}
+			});
+			assert.deepEqual(promise.result, ["default"]); // checking .result invokes the promise
+		});
+	});
 });
