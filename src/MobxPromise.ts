@@ -15,17 +15,19 @@ export type MobxPromiseUnionTypeWithDefault<R> = (
 	{ status: 'complete', isPending: false, isError: false, isComplete: true,  result: R, error: Error|undefined }
 );
 
-export type MobxPromiseInputUnion<R> = PromiseLike<R> | (() => PromiseLike<R>) | MobxPromiseInputParams<R>;
-export type MobxPromiseInputParams<R> = {
+export type MobxPromiseInputUnion<R, InvokeType extends MobxPromise_invoke<R> = ()=>PromiseLike<R>> =
+	PromiseLike<R> | (() => PromiseLike<R>) | MobxPromiseInputParams<R, InvokeType>;
+
+export type MobxPromiseInputParams<R, InvokeType extends MobxPromise_invoke<R>> = {
 	/**
 	 * A function that returns a list of MobxPromise objects which are dependencies of the invoke function.
 	 */
-	await?: MobxPromise_await,
+	await?: AwaitType<InvokeType>,
 
 	/**
 	 * A function that returns the async result or a promise for the async result.
 	 */
-	invoke: MobxPromise_invoke<R>,
+	invoke: InvokeType,
 
 	/**
 	 * Default result in place of undefined
@@ -44,11 +46,18 @@ export type MobxPromiseInputParams<R> = {
 	 */
 	onError?: (error:Error) => void,
 };
+
+export type AwaitType<InvokeType extends Function> =
+	InvokeType extends ((a0:infer A0)=>any) ? ()=>[MobxPromise<A0>] :
+		InvokeType extends ((a0:infer A0, a1:infer A1)=>any) ? ()=>[MobxPromise<A0>, MobxPromise<A1>] :
+		InvokeType extends ((a0:infer A0, a1:infer A1, a2:infer A2)=>any) ? ()=>[MobxPromise<A0>, MobxPromise<A1>, MobxPromise<A2>] :
+		()=>any[];
+
 export type MobxPromise_await = () => Array<MobxPromiseUnionTypeWithDefault<any> | MobxPromiseUnionType<any> | MobxPromise<any>>;
-export type MobxPromise_invoke<R> = () => PromiseLike<R>;
-export type MobxPromiseInputParamsWithDefault<R> = {
-	await?: MobxPromise_await,
-	invoke: MobxPromise_invoke<R>,
+export type MobxPromise_invoke<R> = (...args:any[]) => PromiseLike<R>;
+export type MobxPromiseInputParamsWithDefault<R, InvokeType extends MobxPromise_invoke<R>> = {
+	await?: AwaitType<InvokeType>,
+	invoke: InvokeType,
 	default: R,
 	onResult?: (result:R) => void,
 	onError?: (error:Error) => void,
@@ -58,17 +67,17 @@ export type MobxPromiseInputParamsWithDefault<R> = {
  * MobxPromise provides an observable interface for a computed promise.
  * @author adufilie http://github.com/adufilie
  */
-export class MobxPromiseImpl<R>
+export class MobxPromiseImpl<R, InvokeType extends MobxPromise_invoke<R>>
 {
 	static isPromiseLike(value:any)
 	{
 		return value != null && typeof value === 'object' && typeof value.then === 'function';
 	}
 
-	static normalizeInput<R>(input:MobxPromiseInputParamsWithDefault<R>):MobxPromiseInputParamsWithDefault<R>;
-	static normalizeInput<R>(input:MobxPromiseInputUnion<R>, defaultResult?:R):MobxPromiseInputParamsWithDefault<R>;
-	static normalizeInput<R>(input:MobxPromiseInputUnion<R>):MobxPromiseInputParams<R>;
-	static normalizeInput<R>(input:MobxPromiseInputUnion<R>, defaultResult?:R)
+	static normalizeInput<R, InvokeType extends MobxPromise_invoke<R>>(input:MobxPromiseInputParamsWithDefault<R, InvokeType>):MobxPromiseInputParamsWithDefault<R, InvokeType>;
+	static normalizeInput<R, InvokeType extends MobxPromise_invoke<R>>(input:MobxPromiseInputUnion<R, InvokeType>, defaultResult?:R):MobxPromiseInputParamsWithDefault<R, InvokeType>;
+	static normalizeInput<R, InvokeType extends MobxPromise_invoke<R>>(input:MobxPromiseInputUnion<R, InvokeType>):MobxPromiseInputParams<R, InvokeType>;
+	static normalizeInput<R, InvokeType extends MobxPromise_invoke<R>>(input:MobxPromiseInputUnion<R, InvokeType>, defaultResult?:R)
 	{
 		if (typeof input === 'function')
 			return {invoke: input, default: defaultResult};
@@ -76,13 +85,13 @@ export class MobxPromiseImpl<R>
 		if (MobxPromiseImpl.isPromiseLike(input))
 			return {invoke: () => input as PromiseLike<R>, default: defaultResult};
 
-		input = input as MobxPromiseInputParams<R>;
+		input = input as MobxPromiseInputParams<R, InvokeType>;
 		if (defaultResult !== undefined)
 			input = {...input, default: defaultResult};
 		return input;
 	}
 
-	constructor(input:MobxPromiseInputUnion<R>, defaultResult?:R)
+	constructor(input:MobxPromiseInputUnion<R, InvokeType>, defaultResult?:R)
 	{
 		let norm = MobxPromiseImpl.normalizeInput(input, defaultResult);
 		this.await = norm.await;
@@ -92,8 +101,8 @@ export class MobxPromiseImpl<R>
 		this.onError = norm.onError;
 	}
 
-	private await?:MobxPromise_await;
-	private invoke:MobxPromise_invoke<R>;
+	private await?:AwaitType<InvokeType>
+	private invoke:InvokeType;
 	private onResult?:(result?:R) => void;
 	private onError?:(error:Error) => void;
 	private defaultResult?:R;
@@ -199,19 +208,19 @@ export class MobxPromiseImpl<R>
 
 export type MobxPromiseFactory = {
 	// This provides more information for TypeScript code flow analysis
-	<R>(input:MobxPromiseInputParamsWithDefault<R>):MobxPromiseUnionTypeWithDefault<R>;
-	<R>(input:MobxPromiseInputUnion<R>, defaultResult: R):MobxPromiseUnionTypeWithDefault<R>;
-	<R>(input:MobxPromiseInputUnion<R>):MobxPromiseUnionType<R>;
+	<R, InvokeType extends MobxPromise_invoke<R>>(input:MobxPromiseInputParamsWithDefault<R, InvokeType>):MobxPromiseUnionTypeWithDefault<R>;
+	<R, InvokeType extends MobxPromise_invoke<R>>(input:MobxPromiseInputUnion<R, InvokeType>, defaultResult: R):MobxPromiseUnionTypeWithDefault<R>;
+	<R, InvokeType extends MobxPromise_invoke<R>>(input:MobxPromiseInputUnion<R, InvokeType>):MobxPromiseUnionType<R>;
 };
 
 export const MobxPromise = MobxPromiseImpl as {
 	// This provides more information for TypeScript code flow analysis
-	new <R>(input:MobxPromiseInputParamsWithDefault<R>): MobxPromiseUnionTypeWithDefault<R>;
-	new <R>(input:MobxPromiseInputUnion<R>, defaultResult: R): MobxPromiseUnionTypeWithDefault<R>;
-	new <R>(input:MobxPromiseInputUnion<R>): MobxPromiseUnionType<R>;
+	new <R, InvokeType extends MobxPromise_invoke<R>>(input:MobxPromiseInputParamsWithDefault<R, InvokeType>): MobxPromiseUnionTypeWithDefault<R>;
+	new <R, InvokeType extends MobxPromise_invoke<R>>(input:MobxPromiseInputUnion<R, InvokeType>, defaultResult: R): MobxPromiseUnionTypeWithDefault<R>;
+	new <R, InvokeType extends MobxPromise_invoke<R>>(input:MobxPromiseInputUnion<R, InvokeType>): MobxPromiseUnionType<R>;
 };
 
-export interface MobxPromise<T> extends Pick<MobxPromiseImpl<T>, 'status' | 'error' | 'result' | 'isPending' | 'isError' | 'isComplete'>
+export interface MobxPromise<T> extends Pick<MobxPromiseImpl<T, any>, 'status' | 'error' | 'result' | 'isPending' | 'isError' | 'isComplete'>
 {
 }
 

@@ -98,13 +98,13 @@ describe('MobxPromise', () => {
 	});
 
 	it('calls invoke with the arguments from await', (done)=>{
-		let mp1 = new MobxPromise(()=>new Promise(resolve=>setTimeout(()=>resolve(5), 10)));
-		let mp2 = new MobxPromise(()=>new Promise(resolve=>setTimeout(()=>resolve("hello"), 10)));
+		let mp1 = new MobxPromise(()=>new Promise<number>(resolve=>setTimeout(()=>resolve(5), 10)));
+		let mp2 = new MobxPromise(()=>new Promise<string>(resolve=>setTimeout(()=>resolve("hello"), 10)));
 		let mp3 = new MobxPromise({
 			await:()=>[mp1, mp2],
-			invoke:function(){
-				assert.equal(arguments[0], 5);
-				assert.equal(arguments[1], "hello");
+			invoke:(a0:number, a1:string)=>{
+				assert.equal(a0, 5);
+				assert.equal(a1, "hello");
 				done();
 				return Promise.resolve("hi");
 			}
