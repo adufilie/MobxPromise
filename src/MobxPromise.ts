@@ -148,8 +148,14 @@ export class MobxPromiseImpl<R>
 	 */
 	@cached private get latestInvokeId()
 	{
+		// At this point, all dependencies in await are complete, otherwise we wouldn't
+		//	get here from `status`
+		let awaitResults = [];
+		if (this.await)
+			awaitResults = this.await().map(promise=>promise.result);
+
 		window.clearTimeout(this._latestInvokeId);
-		let promise = this.invoke();
+		let promise = this.invoke.apply(null, awaitResults);
 		let invokeId:number = window.setTimeout(() => this.setPending(invokeId, promise));
 		return this._latestInvokeId = invokeId;
 	}

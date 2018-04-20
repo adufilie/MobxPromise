@@ -96,4 +96,19 @@ describe('MobxPromise', () => {
 			}, 200);
 		});
 	});
+
+	it('calls invoke with the arguments from await', (done)=>{
+		let mp1 = new MobxPromise(()=>new Promise(resolve=>setTimeout(()=>resolve(5), 10)));
+		let mp2 = new MobxPromise(()=>new Promise(resolve=>setTimeout(()=>resolve("hello"), 10)));
+		let mp3 = new MobxPromise({
+			await:()=>[mp1, mp2],
+			invoke:function(){
+				assert.equal(arguments[0], 5);
+				assert.equal(arguments[1], "hello");
+				done();
+				return Promise.resolve("hi");
+			}
+		});
+		mp3.result;
+	});
 });
