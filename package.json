@@ -56,7 +56,6 @@
     "modulePathIgnorePatterns": [
       "/^((?!src).)/"
     ],
-    "testResultsProcessor": "<rootDir>/node_modules/ts-jest/coverageprocessor.js",
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/test/"
@@ -99,9 +98,9 @@
     "ts-node": "^5.0.1",
     "tslint": "^5.9.1",
     "tslint-react": "^3.5.1",
-    "typedoc": "^0.5.10",
+    "typedoc": "^0.11.1",
     "typedoc-webpack-plugin": "^1.1.4",
-    "typescript": "^2.7.2",
+    "typescript": "^2.8.3",
     "validate-commit-msg": "^2.14.0",
     "webpack": "^3.11.0"
   },
