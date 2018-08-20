@@ -166,7 +166,7 @@ var MobxPromiseImpl = function () {
                         return mp.status;
                     })[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                         var _status = _step.value;
-
+                        // track all statuses before returning
                         if (_status !== 'complete') return _status;
                     }
                 } catch (err) {
@@ -223,7 +223,7 @@ var MobxPromiseImpl = function () {
                         return mp.error;
                     })[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
                         var error = _step2.value;
-
+                        // track all errors before returning
                         if (error) return error;
                     }
                 } catch (err) {
@@ -289,7 +289,7 @@ __decorate([utils_1.cached], MobxPromiseImpl.prototype, "isComplete", null);
 __decorate([utils_1.cached], MobxPromiseImpl.prototype, "isError", null);
 __decorate([utils_1.cached], MobxPromiseImpl.prototype, "result", null);
 __decorate([utils_1.cached], MobxPromiseImpl.prototype, "error", null);
-__decorate([utils_1.cached], MobxPromiseImpl.prototype, "latestInvokeId", null);
+__decorate([mobx_1.computed], MobxPromiseImpl.prototype, "latestInvokeId", null);
 __decorate([mobx_1.action], MobxPromiseImpl.prototype, "setPending", null);
 __decorate([mobx_1.action], MobxPromiseImpl.prototype, "setComplete", null);
 __decorate([mobx_1.action], MobxPromiseImpl.prototype, "setError", null);

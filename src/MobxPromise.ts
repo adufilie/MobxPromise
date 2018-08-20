@@ -1,4 +1,4 @@
-import {observable, action} from "mobx";
+import {observable, action, computed} from "mobx";
 import {cached} from "./utils";
 
 /**
@@ -146,7 +146,7 @@ export class MobxPromiseImpl<R>
 	 * This lets mobx determine when to call this.invoke(),
 	 * taking advantage of caching based on observable property access tracking.
 	 */
-	@cached private get latestInvokeId()
+	@computed private get latestInvokeId()
 	{
 		window.clearTimeout(this._latestInvokeId);
 		let promise = this.invoke();

@@ -110,9 +110,9 @@ export declare class MobxPromiseImpl<R> {
      * taking advantage of caching based on observable property access tracking.
      */
     private readonly latestInvokeId;
-    private setPending(invokeId, promise);
-    private setComplete(invokeId, result);
-    private setError(invokeId, error);
+    private setPending;
+    private setComplete;
+    private setError;
 }
 export declare type MobxPromiseFactory = {
     <R>(input: MobxPromiseInputParamsWithDefault<R>): MobxPromiseUnionTypeWithDefault<R>;
