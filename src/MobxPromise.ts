@@ -1,5 +1,4 @@
 import {observable, action, computed} from "mobx";
-import {cached} from "./utils";
 
 /**
  * This tagged union type describes the interoperability of MobxPromise properties.
@@ -104,7 +103,7 @@ export class MobxPromiseImpl<R>
 	@observable.ref private internalResult?:R = undefined;
 	@observable.ref private internalError?:Error = undefined;
 
-	@cached get status():'pending'|'complete'|'error'
+	@computed get status():'pending'|'complete'|'error'
 	{
 		// wait until all MobxPromise dependencies are complete
 		if (this.await)
@@ -118,11 +117,11 @@ export class MobxPromiseImpl<R>
 		return status;
 	}
 
-	@cached get isPending() { return this.status == 'pending'; }
-	@cached get isComplete() { return this.status == 'complete'; }
-	@cached get isError() { return this.status == 'error'; }
+	@computed get isPending() { return this.status == 'pending'; }
+	@computed get isComplete() { return this.status == 'complete'; }
+	@computed get isError() { return this.status == 'error'; }
 
-	@cached get result():R|undefined
+	@computed get result():R|undefined
 	{
 		// checking status may trigger invoke
 		if (this.isError || this.internalResult == null)
@@ -131,7 +130,7 @@ export class MobxPromiseImpl<R>
 		return this.internalResult;
 	}
 
-	@cached get error():Error|undefined
+	@computed get error():Error|undefined
 	{
 		// checking status may trigger invoke
 		if (!this.isComplete && this.await)

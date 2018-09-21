@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -96,7 +96,6 @@ var __decorate = this && this.__decorate || function (decorators, target, key, d
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var mobx_1 = __webpack_require__(1);
-var utils_1 = __webpack_require__(2);
 /**
  * MobxPromise provides an observable interface for a computed promise.
  * @author adufilie http://github.com/adufilie
@@ -283,12 +282,12 @@ var MobxPromiseImpl = function () {
 __decorate([mobx_1.observable], MobxPromiseImpl.prototype, "internalStatus", void 0);
 __decorate([mobx_1.observable.ref], MobxPromiseImpl.prototype, "internalResult", void 0);
 __decorate([mobx_1.observable.ref], MobxPromiseImpl.prototype, "internalError", void 0);
-__decorate([utils_1.cached], MobxPromiseImpl.prototype, "status", null);
-__decorate([utils_1.cached], MobxPromiseImpl.prototype, "isPending", null);
-__decorate([utils_1.cached], MobxPromiseImpl.prototype, "isComplete", null);
-__decorate([utils_1.cached], MobxPromiseImpl.prototype, "isError", null);
-__decorate([utils_1.cached], MobxPromiseImpl.prototype, "result", null);
-__decorate([utils_1.cached], MobxPromiseImpl.prototype, "error", null);
+__decorate([mobx_1.computed], MobxPromiseImpl.prototype, "status", null);
+__decorate([mobx_1.computed], MobxPromiseImpl.prototype, "isPending", null);
+__decorate([mobx_1.computed], MobxPromiseImpl.prototype, "isComplete", null);
+__decorate([mobx_1.computed], MobxPromiseImpl.prototype, "isError", null);
+__decorate([mobx_1.computed], MobxPromiseImpl.prototype, "result", null);
+__decorate([mobx_1.computed], MobxPromiseImpl.prototype, "error", null);
 __decorate([mobx_1.computed], MobxPromiseImpl.prototype, "latestInvokeId", null);
 __decorate([mobx_1.action], MobxPromiseImpl.prototype, "setPending", null);
 __decorate([mobx_1.action], MobxPromiseImpl.prototype, "setComplete", null);
@@ -305,6 +304,24 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function __export(m) {
+    for (var p in m) {
+        if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+    }
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+__export(__webpack_require__(0));
+__export(__webpack_require__(3));
+var MobxPromise_1 = __webpack_require__(0);
+exports.default = MobxPromise_1.default;
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -388,24 +405,6 @@ function debounceAsync(invoke) {
     };
 }
 exports.debounceAsync = debounceAsync;
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-function __export(m) {
-    for (var p in m) {
-        if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-    }
-}
-Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(0));
-__export(__webpack_require__(2));
-var MobxPromise_1 = __webpack_require__(0);
-exports.default = MobxPromise_1.default;
 
 /***/ })
 /******/ ]);
