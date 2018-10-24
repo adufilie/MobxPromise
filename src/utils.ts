@@ -29,7 +29,7 @@ export function cached<T>(target: any, propertyKey: string | symbol, descriptor:
  */
 export function hasObservers<T>(thing:T, property:keyof T)
 {
-	let tree = extras.getObserverTree(thing, property);
+	let tree = extras.getObserverTree(thing, property as string);
 	return tree && tree.observers ? tree.observers.length > 0 : false;
 }
 

@@ -7,12 +7,12 @@ export type MobxPromiseUnionType<R> = (
 	{ status: 'pending',  isPending: true,  isError: false, isComplete: false, result: R|undefined, error: Error|undefined } |
 	{ status: 'error',    isPending: false, isError: true,  isComplete: false, result: R|undefined, error: Error           } |
 	{ status: 'complete', isPending: false, isError: false, isComplete: true,  result: R,           error: Error|undefined }
-);
+) & { peekHasInvoked: boolean };
 export type MobxPromiseUnionTypeWithDefault<R> = (
 	{ status: 'pending',  isPending: true,  isError: false, isComplete: false, result: R, error: Error|undefined } |
 	{ status: 'error',    isPending: false, isError: true,  isComplete: false, result: R, error: Error           } |
 	{ status: 'complete', isPending: false, isError: false, isComplete: true,  result: R, error: Error|undefined }
-);
+) & { peekHasInvoked: boolean };
 
 export type MobxPromiseInputUnion<R> = PromiseLike<R> | (() => PromiseLike<R>) | MobxPromiseInputParams<R>;
 export type MobxPromiseInputParams<R> = {
@@ -102,6 +102,7 @@ export class MobxPromiseImpl<R>
 	@observable private internalStatus:'pending'|'complete'|'error' = 'pending';
 	@observable.ref private internalResult?:R = undefined;
 	@observable.ref private internalError?:Error = undefined;
+	@observable private _hasInvoked:boolean = false;
 
 	@computed get status():'pending'|'complete'|'error'
 	{
@@ -156,6 +157,7 @@ export class MobxPromiseImpl<R>
 	@action private setPending(invokeId:number, promise:PromiseLike<R>)
 	{
 		this.invokeId = invokeId;
+		this._hasInvoked = true;
 		promise.then(
 			result => this.setComplete(invokeId, result),
 			error => this.setError(invokeId, error)
@@ -187,6 +189,10 @@ export class MobxPromiseImpl<R>
 			if (this.onError)
 				this.onError(error);
 		}
+	}
+
+	@computed get peekHasInvoked() {
+		return this._hasInvoked;
 	}
 }
 

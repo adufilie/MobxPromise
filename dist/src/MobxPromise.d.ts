@@ -22,7 +22,9 @@ export declare type MobxPromiseUnionType<R> = ({
     isComplete: true;
     result: R;
     error: Error | undefined;
-});
+}) & {
+    peekHasInvoked: boolean;
+};
 export declare type MobxPromiseUnionTypeWithDefault<R> = ({
     status: 'pending';
     isPending: true;
@@ -44,7 +46,9 @@ export declare type MobxPromiseUnionTypeWithDefault<R> = ({
     isComplete: true;
     result: R;
     error: Error | undefined;
-});
+}) & {
+    peekHasInvoked: boolean;
+};
 export declare type MobxPromiseInputUnion<R> = PromiseLike<R> | (() => PromiseLike<R>) | MobxPromiseInputParams<R>;
 export declare type MobxPromiseInputParams<R> = {
     /**
@@ -99,6 +103,7 @@ export declare class MobxPromiseImpl<R> {
     private internalStatus;
     private internalResult?;
     private internalError?;
+    private _hasInvoked;
     readonly status: 'pending' | 'complete' | 'error';
     readonly isPending: boolean;
     readonly isComplete: boolean;
@@ -113,6 +118,7 @@ export declare class MobxPromiseImpl<R> {
     private setPending;
     private setComplete;
     private setError;
+    readonly peekHasInvoked: boolean;
 }
 export declare type MobxPromiseFactory = {
     <R>(input: MobxPromiseInputParamsWithDefault<R>): MobxPromiseUnionTypeWithDefault<R>;
@@ -120,72 +126,9 @@ export declare type MobxPromiseFactory = {
     <R>(input: MobxPromiseInputUnion<R>): MobxPromiseUnionType<R>;
 };
 export declare const MobxPromise: {
-    new <R>(input: MobxPromiseInputParamsWithDefault<R>): {
-        status: "pending";
-        isPending: true;
-        isError: false;
-        isComplete: false;
-        result: R;
-        error: Error | undefined;
-    } | {
-        status: "error";
-        isPending: false;
-        isError: true;
-        isComplete: false;
-        result: R;
-        error: Error;
-    } | {
-        status: "complete";
-        isPending: false;
-        isError: false;
-        isComplete: true;
-        result: R;
-        error: Error | undefined;
-    };
-    new <R>(input: MobxPromiseInputUnion<R>, defaultResult: R): {
-        status: "pending";
-        isPending: true;
-        isError: false;
-        isComplete: false;
-        result: R;
-        error: Error | undefined;
-    } | {
-        status: "error";
-        isPending: false;
-        isError: true;
-        isComplete: false;
-        result: R;
-        error: Error;
-    } | {
-        status: "complete";
-        isPending: false;
-        isError: false;
-        isComplete: true;
-        result: R;
-        error: Error | undefined;
-    };
-    new <R>(input: MobxPromiseInputUnion<R>): {
-        status: "pending";
-        isPending: true;
-        isError: false;
-        isComplete: false;
-        result: R | undefined;
-        error: Error | undefined;
-    } | {
-        status: "error";
-        isPending: false;
-        isError: true;
-        isComplete: false;
-        result: R | undefined;
-        error: Error;
-    } | {
-        status: "complete";
-        isPending: false;
-        isError: false;
-        isComplete: true;
-        result: R;
-        error: Error | undefined;
-    };
+    new <R>(input: MobxPromiseInputParamsWithDefault<R>): MobxPromiseUnionTypeWithDefault<R>;
+    new <R>(input: MobxPromiseInputUnion<R>, defaultResult: R): MobxPromiseUnionTypeWithDefault<R>;
+    new <R>(input: MobxPromiseInputUnion<R>): MobxPromiseUnionType<R>;
 };
 export interface MobxPromise<T> extends Pick<MobxPromiseImpl<T>, 'status' | 'error' | 'result' | 'isPending' | 'isError' | 'isComplete'> {
 }

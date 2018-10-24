@@ -110,6 +110,7 @@ var MobxPromiseImpl = function () {
         this.internalStatus = 'pending';
         this.internalResult = undefined;
         this.internalError = undefined;
+        this._hasInvoked = false;
         var norm = MobxPromiseImpl.normalizeInput(input, defaultResult);
         this.await = norm.await;
         this.invoke = norm.invoke;
@@ -124,6 +125,7 @@ var MobxPromiseImpl = function () {
             var _this = this;
 
             this.invokeId = invokeId;
+            this._hasInvoked = true;
             promise.then(function (result) {
                 return _this.setComplete(invokeId, result);
             }, function (error) {
@@ -258,6 +260,11 @@ var MobxPromiseImpl = function () {
             });
             return this._latestInvokeId = invokeId;
         }
+    }, {
+        key: "peekHasInvoked",
+        get: function get() {
+            return this._hasInvoked;
+        }
     }], [{
         key: "isPromiseLike",
         value: function isPromiseLike(value) {
@@ -282,6 +289,7 @@ var MobxPromiseImpl = function () {
 __decorate([mobx_1.observable], MobxPromiseImpl.prototype, "internalStatus", void 0);
 __decorate([mobx_1.observable.ref], MobxPromiseImpl.prototype, "internalResult", void 0);
 __decorate([mobx_1.observable.ref], MobxPromiseImpl.prototype, "internalError", void 0);
+__decorate([mobx_1.observable], MobxPromiseImpl.prototype, "_hasInvoked", void 0);
 __decorate([mobx_1.computed], MobxPromiseImpl.prototype, "status", null);
 __decorate([mobx_1.computed], MobxPromiseImpl.prototype, "isPending", null);
 __decorate([mobx_1.computed], MobxPromiseImpl.prototype, "isComplete", null);
@@ -292,6 +300,7 @@ __decorate([mobx_1.computed], MobxPromiseImpl.prototype, "latestInvokeId", null)
 __decorate([mobx_1.action], MobxPromiseImpl.prototype, "setPending", null);
 __decorate([mobx_1.action], MobxPromiseImpl.prototype, "setComplete", null);
 __decorate([mobx_1.action], MobxPromiseImpl.prototype, "setError", null);
+__decorate([mobx_1.computed], MobxPromiseImpl.prototype, "peekHasInvoked", null);
 exports.MobxPromiseImpl = MobxPromiseImpl;
 exports.MobxPromise = MobxPromiseImpl;
 exports.default = exports.MobxPromise;
