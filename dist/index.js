@@ -110,7 +110,6 @@ var MobxPromiseImpl = function () {
         this.internalStatus = 'pending';
         this.internalResult = undefined;
         this.internalError = undefined;
-        this._hasInvoked = false;
         var norm = MobxPromiseImpl.normalizeInput(input, defaultResult);
         this.await = norm.await;
         this.invoke = norm.invoke;
@@ -125,7 +124,6 @@ var MobxPromiseImpl = function () {
             var _this = this;
 
             this.invokeId = invokeId;
-            this._hasInvoked = true;
             promise.then(function (result) {
                 return _this.setComplete(invokeId, result);
             }, function (error) {
@@ -189,6 +187,41 @@ var MobxPromiseImpl = function () {
             return status;
         }
     }, {
+        key: "peekStatus",
+        get: function get() {
+            // check status without triggering invoke
+            // check status of all MobxPromise dependencies
+            if (this.await) {
+                var _iteratorNormalCompletion2 = true;
+                var _didIteratorError2 = false;
+                var _iteratorError2 = undefined;
+
+                try {
+                    for (var _iterator2 = this.await().map(function (mp) {
+                        return mp.peekStatus;
+                    })[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                        var status = _step2.value;
+
+                        if (status !== 'complete') return status;
+                    }
+                } catch (err) {
+                    _didIteratorError2 = true;
+                    _iteratorError2 = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                            _iterator2.return();
+                        }
+                    } finally {
+                        if (_didIteratorError2) {
+                            throw _iteratorError2;
+                        }
+                    }
+                }
+            } // otherwise, return internal status
+            return this.internalStatus;
+        }
+    }, {
         key: "isPending",
         get: function get() {
             return this.status == 'pending';
@@ -215,29 +248,29 @@ var MobxPromiseImpl = function () {
         get: function get() {
             // checking status may trigger invoke
             if (!this.isComplete && this.await) {
-                var _iteratorNormalCompletion2 = true;
-                var _didIteratorError2 = false;
-                var _iteratorError2 = undefined;
+                var _iteratorNormalCompletion3 = true;
+                var _didIteratorError3 = false;
+                var _iteratorError3 = undefined;
 
                 try {
-                    for (var _iterator2 = this.await().map(function (mp) {
+                    for (var _iterator3 = this.await().map(function (mp) {
                         return mp.error;
-                    })[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                        var error = _step2.value;
+                    })[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                        var error = _step3.value;
                         // track all errors before returning
                         if (error) return error;
                     }
                 } catch (err) {
-                    _didIteratorError2 = true;
-                    _iteratorError2 = err;
+                    _didIteratorError3 = true;
+                    _iteratorError3 = err;
                 } finally {
                     try {
-                        if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                            _iterator2.return();
+                        if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                            _iterator3.return();
                         }
                     } finally {
-                        if (_didIteratorError2) {
-                            throw _iteratorError2;
+                        if (_didIteratorError3) {
+                            throw _iteratorError3;
                         }
                     }
                 }
@@ -259,11 +292,6 @@ var MobxPromiseImpl = function () {
                 return _this2.setPending(invokeId, promise);
             });
             return this._latestInvokeId = invokeId;
-        }
-    }, {
-        key: "peekHasInvoked",
-        get: function get() {
-            return this._hasInvoked;
         }
     }], [{
         key: "isPromiseLike",
@@ -289,8 +317,8 @@ var MobxPromiseImpl = function () {
 __decorate([mobx_1.observable], MobxPromiseImpl.prototype, "internalStatus", void 0);
 __decorate([mobx_1.observable.ref], MobxPromiseImpl.prototype, "internalResult", void 0);
 __decorate([mobx_1.observable.ref], MobxPromiseImpl.prototype, "internalError", void 0);
-__decorate([mobx_1.observable], MobxPromiseImpl.prototype, "_hasInvoked", void 0);
 __decorate([mobx_1.computed], MobxPromiseImpl.prototype, "status", null);
+__decorate([mobx_1.computed], MobxPromiseImpl.prototype, "peekStatus", null);
 __decorate([mobx_1.computed], MobxPromiseImpl.prototype, "isPending", null);
 __decorate([mobx_1.computed], MobxPromiseImpl.prototype, "isComplete", null);
 __decorate([mobx_1.computed], MobxPromiseImpl.prototype, "isError", null);
@@ -300,7 +328,6 @@ __decorate([mobx_1.computed], MobxPromiseImpl.prototype, "latestInvokeId", null)
 __decorate([mobx_1.action], MobxPromiseImpl.prototype, "setPending", null);
 __decorate([mobx_1.action], MobxPromiseImpl.prototype, "setComplete", null);
 __decorate([mobx_1.action], MobxPromiseImpl.prototype, "setError", null);
-__decorate([mobx_1.computed], MobxPromiseImpl.prototype, "peekHasInvoked", null);
 exports.MobxPromiseImpl = MobxPromiseImpl;
 exports.MobxPromise = MobxPromiseImpl;
 exports.default = exports.MobxPromise;

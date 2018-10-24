@@ -1,6 +1,7 @@
 /**
  * This tagged union type describes the interoperability of MobxPromise properties.
  */
+declare type MobxPromiseStatus = 'pending' | 'error' | 'complete';
 export declare type MobxPromiseUnionType<R> = ({
     status: 'pending';
     isPending: true;
@@ -23,7 +24,7 @@ export declare type MobxPromiseUnionType<R> = ({
     result: R;
     error: Error | undefined;
 }) & {
-    peekHasInvoked: boolean;
+    peekStatus: MobxPromiseStatus;
 };
 export declare type MobxPromiseUnionTypeWithDefault<R> = ({
     status: 'pending';
@@ -47,7 +48,7 @@ export declare type MobxPromiseUnionTypeWithDefault<R> = ({
     result: R;
     error: Error | undefined;
 }) & {
-    peekHasInvoked: boolean;
+    peekStatus: MobxPromiseStatus;
 };
 export declare type MobxPromiseInputUnion<R> = PromiseLike<R> | (() => PromiseLike<R>) | MobxPromiseInputParams<R>;
 export declare type MobxPromiseInputParams<R> = {
@@ -103,8 +104,8 @@ export declare class MobxPromiseImpl<R> {
     private internalStatus;
     private internalResult?;
     private internalError?;
-    private _hasInvoked;
     readonly status: 'pending' | 'complete' | 'error';
+    readonly peekStatus: 'pending' | 'complete' | 'error';
     readonly isPending: boolean;
     readonly isComplete: boolean;
     readonly isError: boolean;
@@ -118,7 +119,6 @@ export declare class MobxPromiseImpl<R> {
     private setPending;
     private setComplete;
     private setError;
-    readonly peekHasInvoked: boolean;
 }
 export declare type MobxPromiseFactory = {
     <R>(input: MobxPromiseInputParamsWithDefault<R>): MobxPromiseUnionTypeWithDefault<R>;
@@ -130,6 +130,6 @@ export declare const MobxPromise: {
     new <R>(input: MobxPromiseInputUnion<R>, defaultResult: R): MobxPromiseUnionTypeWithDefault<R>;
     new <R>(input: MobxPromiseInputUnion<R>): MobxPromiseUnionType<R>;
 };
-export interface MobxPromise<T> extends Pick<MobxPromiseImpl<T>, 'status' | 'error' | 'result' | 'isPending' | 'isError' | 'isComplete'> {
+export interface MobxPromise<T> extends Pick<MobxPromiseImpl<T>, 'status' | 'error' | 'result' | 'isPending' | 'isError' | 'isComplete' | 'peekStatus'> {
 }
 export default MobxPromise;
