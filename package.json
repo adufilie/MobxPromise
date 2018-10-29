@@ -48,6 +48,7 @@
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
     "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "testURL": "http://localhost/",
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -56,7 +57,6 @@
     "modulePathIgnorePatterns": [
       "/^((?!src).)/"
     ],
-    "testResultsProcessor": "<rootDir>/node_modules/ts-jest/coverageprocessor.js",
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/test/"
@@ -88,7 +88,6 @@
     "coveralls": "^3.0.0",
     "cross-env": "^5.1.4",
     "cz-conventional-changelog": "^2.1.0",
-    "husky": "^0.14.3",
     "jest": "^22.4.2",
     "prompt": "^1.0.0",
     "replace-in-file": "^3.2.0",

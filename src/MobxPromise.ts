@@ -3,16 +3,17 @@ import {observable, action, computed} from "mobx";
 /**
  * This tagged union type describes the interoperability of MobxPromise properties.
  */
+type MobxPromiseStatus = 'pending' | 'error' | 'complete';
 export type MobxPromiseUnionType<R> = (
 	{ status: 'pending',  isPending: true,  isError: false, isComplete: false, result: R|undefined, error: Error|undefined } |
 	{ status: 'error',    isPending: false, isError: true,  isComplete: false, result: R|undefined, error: Error           } |
 	{ status: 'complete', isPending: false, isError: false, isComplete: true,  result: R,           error: Error|undefined }
-);
+) & { peekStatus: MobxPromiseStatus };
 export type MobxPromiseUnionTypeWithDefault<R> = (
 	{ status: 'pending',  isPending: true,  isError: false, isComplete: false, result: R, error: Error|undefined } |
 	{ status: 'error',    isPending: false, isError: true,  isComplete: false, result: R, error: Error           } |
 	{ status: 'complete', isPending: false, isError: false, isComplete: true,  result: R, error: Error|undefined }
-);
+) & { peekStatus: MobxPromiseStatus };
 
 export type MobxPromiseInputUnion<R> = PromiseLike<R> | (() => PromiseLike<R>) | MobxPromiseInputParams<R>;
 export type MobxPromiseInputParams<R> = {
@@ -117,6 +118,20 @@ export class MobxPromiseImpl<R>
 		return status;
 	}
 
+	@computed get peekStatus():'pending'|'complete'|'error'
+	{
+		// check status without triggering invoke
+
+		// check status of all MobxPromise dependencies
+		if (this.await)
+			for (let status of this.await().map(mp => mp.peekStatus))
+				if (status !== 'complete')
+					return status;
+
+		// otherwise, return internal status
+		return this.internalStatus;
+	}
+
 	@computed get isPending() { return this.status == 'pending'; }
 	@computed get isComplete() { return this.status == 'complete'; }
 	@computed get isError() { return this.status == 'error'; }
@@ -204,7 +219,7 @@ export const MobxPromise = MobxPromiseImpl as {
 	new <R>(input:MobxPromiseInputUnion<R>): MobxPromiseUnionType<R>;
 };
 
-export interface MobxPromise<T> extends Pick<MobxPromiseImpl<T>, 'status' | 'error' | 'result' | 'isPending' | 'isError' | 'isComplete'>
+export interface MobxPromise<T> extends Pick<MobxPromiseImpl<T>, 'status' | 'error' | 'result' | 'isPending' | 'isError' | 'isComplete' | 'peekStatus'>
 {
 }
 
