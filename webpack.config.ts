@@ -1,7 +1,6 @@
 import {join} from 'path'
 const {camelCase} = require('lodash')
 const {TsConfigPathsPlugin, CheckerPlugin} = require('awesome-typescript-loader')
-const TypedocWebpackPlugin = require('typedoc-webpack-plugin')
 
 /**
  * Update this variable if you change your library name
@@ -44,15 +43,6 @@ export default {
 	},
 	plugins: [
 		new CheckerPlugin(),
-		new TsConfigPathsPlugin(),
-		new TypedocWebpackPlugin(
-			{
-				theme: 'minimal',
-				out: 'docs',
-				target: 'es6',
-				ignoreCompilerErrors: true
-			},
-			'src'
-		)
+		new TsConfigPathsPlugin()
 	]
 }
