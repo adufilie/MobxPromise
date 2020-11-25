@@ -1,4 +1,4 @@
-import {observable, action, computed} from "mobx";
+import {observable, action, computed, makeObservable} from "mobx";
 
 /**
  * This tagged union type describes the interoperability of MobxPromise properties.
@@ -80,6 +80,9 @@ export class MobxPromiseImpl<R> {
     }
 
     constructor(input: MobxPromiseInputUnion<R>, defaultResult?: R) {
+
+        makeObservable<MobxPromiseImpl<R>>(this);
+
         let norm = MobxPromiseImpl.normalizeInput(input, defaultResult);
         this.await = norm.await;
         this.invoke = norm.invoke;

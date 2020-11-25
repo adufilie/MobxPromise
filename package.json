@@ -30,7 +30,6 @@
     "deploy-docs": "node tools/gh-pages-publish.js",
     "report-coverage": "cat ./coverage/lcov.info | coveralls",
     "commit": "git-cz",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "prepush": "npm run test:prod && npm run build",
     "commitmsg": "validate-commit-msg"
   },
@@ -92,17 +91,16 @@
     "prompt": "^1.0.0",
     "replace-in-file": "^3.2.0",
     "rimraf": "^2.6.2",
-    "semantic-release": "^15.0.3",
     "sinon": "^4.4.6",
     "ts-jest": "^22.4.1",
-    "ts-node": "^5.0.1",
+    "ts-node": "^9.0.0",
     "tslint": "^5.9.1",
     "tslint-react": "^3.5.1",
-    "typescript": "^2.7.2",
+    "typescript": "^4.1.2",
     "validate-commit-msg": "^2.14.0",
     "webpack": "^3.11.0"
   },
   "dependencies": {
-    "mobx": "^3.1.7"
+    "mobx": "6.0.0"
   }
 }

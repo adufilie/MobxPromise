@@ -104,18 +104,18 @@ export declare class MobxPromiseImpl<R> {
     private internalStatus;
     private internalResult?;
     private internalError?;
-    readonly status: 'pending' | 'complete' | 'error';
-    readonly peekStatus: 'pending' | 'complete' | 'error';
-    readonly isPending: boolean;
-    readonly isComplete: boolean;
-    readonly isError: boolean;
-    readonly result: R | undefined;
-    readonly error: Error | undefined;
+    get status(): 'pending' | 'complete' | 'error';
+    get peekStatus(): 'pending' | 'complete' | 'error';
+    get isPending(): boolean;
+    get isComplete(): boolean;
+    get isError(): boolean;
+    get result(): R | undefined;
+    get error(): Error | undefined;
     /**
      * This lets mobx determine when to call this.invoke(),
      * taking advantage of caching based on observable property access tracking.
      */
-    private readonly latestInvokeId;
+    private get latestInvokeId();
     private setPending;
     private setComplete;
     private setError;
@@ -127,8 +127,8 @@ export declare type MobxPromiseFactory = {
 };
 export declare const MobxPromise: {
     new <R>(input: MobxPromiseInputParamsWithDefault<R>): MobxPromiseUnionTypeWithDefault<R>;
-    new <R>(input: MobxPromiseInputUnion<R>, defaultResult: R): MobxPromiseUnionTypeWithDefault<R>;
-    new <R>(input: MobxPromiseInputUnion<R>): MobxPromiseUnionType<R>;
+    new <R_1>(input: MobxPromiseInputUnion<R_1>, defaultResult: R_1): MobxPromiseUnionTypeWithDefault<R_1>;
+    new <R_2>(input: MobxPromiseInputUnion<R_2>): MobxPromiseUnionType<R_2>;
 };
 export interface MobxPromise<T> extends Pick<MobxPromiseImpl<T>, 'status' | 'error' | 'result' | 'isPending' | 'isError' | 'isComplete' | 'peekStatus'> {
 }
