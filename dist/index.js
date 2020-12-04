@@ -95,6 +95,7 @@ var __decorate = this && this.__decorate || function (decorators, target, key, d
     }return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.MobxPromise = exports.MobxPromiseImpl = void 0;
 var mobx_1 = __webpack_require__(1);
 /**
  * MobxPromise provides an observable interface for a computed promise.
@@ -105,11 +106,67 @@ var MobxPromiseImpl = function () {
     function MobxPromiseImpl(input, defaultResult) {
         _classCallCheck(this, MobxPromiseImpl);
 
-        this.invokeId = 0;
-        this._latestInvokeId = 0;
-        this.internalStatus = 'pending';
-        this.internalResult = undefined;
-        this.internalError = undefined;
+        Object.defineProperty(this, "await", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        Object.defineProperty(this, "invoke", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        Object.defineProperty(this, "onResult", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        Object.defineProperty(this, "onError", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        Object.defineProperty(this, "defaultResult", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: void 0
+        });
+        Object.defineProperty(this, "invokeId", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: 0
+        });
+        Object.defineProperty(this, "_latestInvokeId", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: 0
+        });
+        Object.defineProperty(this, "internalStatus", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: 'pending'
+        });
+        Object.defineProperty(this, "internalResult", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: undefined
+        });
+        Object.defineProperty(this, "internalError", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: undefined
+        });
+        mobx_1.makeObservable(this);
         var norm = MobxPromiseImpl.normalizeInput(input, defaultResult);
         this.await = norm.await;
         this.invoke = norm.invoke;
@@ -306,7 +363,7 @@ var MobxPromiseImpl = function () {
                     return input;
                 }, default: defaultResult };
             input = input;
-            if (defaultResult !== undefined) input = Object.assign({}, input, { default: defaultResult });
+            if (defaultResult !== undefined) input = Object.assign(Object.assign({}, input), { default: defaultResult });
             return input;
         }
     }]);
@@ -345,14 +402,23 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_1__;
 "use strict";
 
 
-function __export(m) {
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function get() {
+            return m[k];
+        } });
+} : function (o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+});
+var __exportStar = this && this.__exportStar || function (m, exports) {
     for (var p in m) {
-        if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+        if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
     }
-}
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(0));
-__export(__webpack_require__(3));
+__exportStar(__webpack_require__(0), exports);
+__exportStar(__webpack_require__(3), exports);
 var MobxPromise_1 = __webpack_require__(0);
 exports.default = MobxPromise_1.default;
 
@@ -364,6 +430,7 @@ exports.default = MobxPromise_1.default;
 
 
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.debounceAsync = exports.labelMobxPromises = exports.hasObservers = exports.cached = void 0;
 var mobx_1 = __webpack_require__(1);
 var MobxPromise_1 = __webpack_require__(0);
 /**
@@ -377,9 +444,11 @@ function cached(target, propertyKey, descriptor) {
     if (descriptor.get) {
         var get = descriptor.get;
         descriptor.get = function () {
-            var computed = mobx_1.extras.getAtom(this, propertyKey);
+            var atom = mobx_1.getAtom(this, propertyKey);
             // to keep the cached value, add an observer if there are none
-            if (computed.observers && computed.observers.length === 0) computed.observe(function () {});
+            if (!atom.isBeingObserved_) mobx_1.autorun(function () {
+                return atom;
+            });
 
             for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
                 args[_key] = arguments[_key];
@@ -388,14 +457,14 @@ function cached(target, propertyKey, descriptor) {
             return get.apply(this, args);
         };
     }
-    return mobx_1.computed(target, propertyKey, descriptor);
+    return descriptor;
 }
 exports.cached = cached;
 /**
  * Checks if a property has observers.
  */
 function hasObservers(thing, property) {
-    var tree = mobx_1.extras.getObserverTree(thing, property);
+    var tree = mobx_1.getObserverTree(thing, property);
     return tree && tree.observers ? tree.observers.length > 0 : false;
 }
 exports.hasObservers = hasObservers;
@@ -407,7 +476,7 @@ function labelMobxPromises(target) {
     for (var key in target) {
         var desc = Object.getOwnPropertyDescriptor(target, key);
         if (desc && desc.value instanceof MobxPromise_1.MobxPromise) {
-            var admin = mobx_1.extras.getAdministration(desc.value);
+            var admin = mobx_1._getAdministration(desc.value);
             admin.name = key + "(" + admin.name + ")";
         }
     }

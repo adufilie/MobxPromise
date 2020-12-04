@@ -5,7 +5,7 @@
  * @param propertyKey
  * @param descriptor
  */
-export declare function cached<T>(target: any, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>): void;
+export declare function cached<T>(target: any, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
 /**
  * Checks if a property has observers.
  */
