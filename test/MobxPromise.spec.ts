@@ -47,11 +47,13 @@ describe('MobxPromise', () => {
     });
 
     it('triggers mobx as expected', async () => {
-        let value = mobx.observable(INITIAL);
+        let value = mobx.observable({
+            str: INITIAL
+        });
         let params = {
-            invoke: spy(async () => value),
+            invoke: spy(async () => value.str),
             default: DEFAULT,
-            reaction: spy((result: string) => null)
+            onResult: spy((result: string) => null)
         };
         let mp = new MobxPromise(params);
         // let reaction = spy(() => {
@@ -75,16 +77,22 @@ describe('MobxPromise', () => {
         assert.equal(mp.result, INITIAL, 'observed initial result');
         assert.equal(mp.status, 'complete', 'status is complete when result updates');
         assert.equal(mp.peekStatus, "complete", "peekStatus is same as status");
+        assert.isTrue(params.onResult.calledOnce, 'callback invoked');
+        assert.equal(params.onResult.firstCall.args[0], INITIAL);
 
-        value = 'this result should be skipped';
+        value.str = 'this result should be skipped';
         assert.equal(mp.peekStatus, "complete", "peekStatus is still complete because it doesnt respond to changed dependency");
         assert.equal(mp.status, 'pending', 'status pending after updating dependency');
         assert.equal(mp.result, INITIAL, 'result is still initial value');
-        value = 'updated result';
+        assert.isTrue(params.onResult.calledOnce, 'callback not called again');
+        value.str = 'updated result';
         await whenComplete(mp);
         assert.equal(mp.peekStatus, "complete", "peekStatus is same as status");
         assert.equal(mp.status, 'complete', 'status updated to complete');
-        assert.equal(mp.result, value, 'result updated to latest value');
+        assert.equal(mp.result, value.str, 'result updated to latest value');
+        assert.isTrue(params.onResult.calledTwice, 'callback has been invoked again');
+        assert.equal(params.onResult.lastCall.args[0], value.str);
+
         // assert.isTrue(params.reaction.calledTwice, 'params.reaction() called only twice');
         // assert.isTrue(params.reaction.firstCall.calledWith(INITIAL), 'params.reaction() called first time with initial value');
         // assert.isTrue(params.reaction.lastCall.calledWith(value.get()), 'params.reaction() called second time with final value');
@@ -93,9 +101,9 @@ describe('MobxPromise', () => {
     });
 
     it('will not keep calling invoke when not observed', async () => {
-        let value = mobx.observable(INITIAL);
+        let value = mobx.observable.box(INITIAL);
         let params = {
-            invoke: spy(async () => value),
+            invoke: spy(async () => value.get()),
             default: DEFAULT,
             reaction: spy((result: string) => null)
         };
@@ -111,7 +119,7 @@ describe('MobxPromise', () => {
             setTimeout(() => {
                 try {
                     let callCount = params.invoke.callCount;
-                    assert.equal(mp.result, value, 'result using latest value');
+                    assert.equal(mp.result, value.get(), 'result using latest value');
                     assert.equal(params.invoke.callCount, callCount, 'not invoked again');
                     assert.equal(mp.peekStatus, "complete", "peekStatus is complete");
                     resolve(true);
