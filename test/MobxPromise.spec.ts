@@ -2,6 +2,7 @@ import {assert} from "chai";
 import * as Sinon from 'sinon';
 import * as mobx from "mobx";
 import MobxPromise from "../src/mobxpromise";
+import {runInAction} from "mobx";
 
 function spy<T extends (...args: any[]) => void>(func: T) {
     return Sinon.spy(func) as T & Sinon.SinonSpy;
@@ -80,12 +81,16 @@ describe('MobxPromise', () => {
         assert.isTrue(params.onResult.calledOnce, 'callback invoked');
         assert.equal(params.onResult.firstCall.args[0], INITIAL);
 
-        value.str = 'this result should be skipped';
+        runInAction(()=>{
+            value.str = 'this result should be skipped';
+        });
         assert.equal(mp.peekStatus, "complete", "peekStatus is still complete because it doesnt respond to changed dependency");
         assert.equal(mp.status, 'pending', 'status pending after updating dependency');
         assert.equal(mp.result, INITIAL, 'result is still initial value');
         assert.isTrue(params.onResult.calledOnce, 'callback not called again');
-        value.str = 'updated result';
+        runInAction(()=> {
+            value.str = 'updated result';
+        });
         await whenComplete(mp);
         assert.equal(mp.peekStatus, "complete", "peekStatus is same as status");
         assert.equal(mp.status, 'complete', 'status updated to complete');
