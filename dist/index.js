@@ -173,6 +173,8 @@ var MobxPromiseImpl = function () {
         this.defaultResult = norm.default;
         this.onResult = norm.onResult;
         this.onError = norm.onError;
+        /*@ts-ignore */
+        this.label = input.label;
     }
 
     _createClass(MobxPromiseImpl, [{
@@ -297,6 +299,14 @@ var MobxPromiseImpl = function () {
         key: "result",
         get: function get() {
             // checking status may trigger invoke
+            /*@ts-ignore*/
+            if (this.isComplete === false) {
+                if (localStorage.debugMP) {
+                    debugger;
+                }
+                /*@ts-ignore*/
+                console.log(this.label + " accessed prior to completion", this);
+            }
             if (this.isError || this.internalResult == null) return this.defaultResult;
             return this.internalResult;
         }
@@ -357,13 +367,13 @@ var MobxPromiseImpl = function () {
         }
     }, {
         key: "normalizeInput",
-        value: function normalizeInput(input, defaultResult) {
-            if (typeof input === 'function') return { invoke: input, default: defaultResult };
+        value: function normalizeInput(input, defaultResult, label) {
+            if (typeof input === 'function') return { invoke: input, default: defaultResult, label: label };
             if (MobxPromiseImpl.isPromiseLike(input)) return { invoke: function invoke() {
                     return input;
-                }, default: defaultResult };
+                }, default: defaultResult, label: label };
             input = input;
-            if (defaultResult !== undefined) input = Object.assign(Object.assign({}, input), { default: defaultResult });
+            if (defaultResult !== undefined) input = Object.assign(Object.assign({}, input), { default: defaultResult, label: label });
             return input;
         }
     }]);

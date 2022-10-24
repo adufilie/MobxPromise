@@ -43,6 +43,8 @@ export type MobxPromiseInputParams<R> = {
      * It will not be called for out-of-date promises.
      */
     onError?: (error: Error) => void,
+
+    label?: string,
 };
 export type MobxPromise_await = () => Array<MobxPromiseUnionTypeWithDefault<any> | MobxPromiseUnionType<any> | MobxPromise<any>>;
 export type MobxPromise_invoke<R> = () => PromiseLike<R>;
@@ -52,6 +54,7 @@ export type MobxPromiseInputParamsWithDefault<R> = {
     default: R,
     onResult?: (result: R) => void,
     onError?: (error: Error) => void,
+    label?: string,
 };
 
 /**
@@ -64,18 +67,19 @@ export class MobxPromiseImpl<R> {
     }
 
     static normalizeInput<R>(input: MobxPromiseInputParamsWithDefault<R>): MobxPromiseInputParamsWithDefault<R>;
-    static normalizeInput<R>(input: MobxPromiseInputUnion<R>, defaultResult?: R): MobxPromiseInputParamsWithDefault<R>;
+    static normalizeInput<R>(input: MobxPromiseInputUnion<R>, defaultResult?: R, label?:string): MobxPromiseInputParamsWithDefault<R>;
     static normalizeInput<R>(input: MobxPromiseInputUnion<R>): MobxPromiseInputParams<R>;
-    static normalizeInput<R>(input: MobxPromiseInputUnion<R>, defaultResult?: R) {
+    static normalizeInput<R>(input: MobxPromiseInputUnion<R>, defaultResult?: R, label?:string) {
         if (typeof input === 'function')
-            return {invoke: input, default: defaultResult};
+            return {invoke: input, default: defaultResult, label };
 
         if (MobxPromiseImpl.isPromiseLike(input))
-            return {invoke: () => input as PromiseLike<R>, default: defaultResult};
+            return {invoke: () => input as PromiseLike<R>, default: defaultResult, label};
 
         input = input as MobxPromiseInputParams<R>;
         if (defaultResult !== undefined)
-            input = {...input, default: defaultResult};
+            input = {...input, default: defaultResult, label};
+
         return input;
     }
 
@@ -89,6 +93,9 @@ export class MobxPromiseImpl<R> {
         this.defaultResult = norm.default;
         this.onResult = norm.onResult;
         this.onError = norm.onError;
+
+        /*@ts-ignore */
+        this.label = input.label;
     }
 
     private await?: MobxPromise_await;
@@ -143,6 +150,17 @@ export class MobxPromiseImpl<R> {
 
     @computed get result(): R | undefined {
         // checking status may trigger invoke
+        /*@ts-ignore*/
+        if (this.isComplete === false) {
+
+            if (localStorage.debugMP) {
+                debugger;
+            }
+
+            /*@ts-ignore*/
+            console.log(`${this.label} accessed prior to completion`, this);
+        }
+
         if (this.isError || this.internalResult == null)
             return this.defaultResult;
 
@@ -209,14 +227,14 @@ export class MobxPromiseImpl<R> {
 export type MobxPromiseFactory = {
     // This provides more information for TypeScript code flow analysis
     <R>(input: MobxPromiseInputParamsWithDefault<R>): MobxPromiseUnionTypeWithDefault<R>;
-    <R>(input: MobxPromiseInputUnion<R>, defaultResult: R): MobxPromiseUnionTypeWithDefault<R>;
+    <R>(input: MobxPromiseInputUnion<R>, defaultResult: R | undefined, label?:string): MobxPromiseUnionTypeWithDefault<R>;
     <R>(input: MobxPromiseInputUnion<R>): MobxPromiseUnionType<R>;
 };
 
 export const MobxPromise = MobxPromiseImpl as {
     // This provides more information for TypeScript code flow analysis
     new<R>(input: MobxPromiseInputParamsWithDefault<R>): MobxPromiseUnionTypeWithDefault<R>;
-    new<R>(input: MobxPromiseInputUnion<R>, defaultResult: R): MobxPromiseUnionTypeWithDefault<R>;
+    new<R>(input: MobxPromiseInputUnion<R>, defaultResult: R | undefined, label?:string): MobxPromiseUnionTypeWithDefault<R>;
     new<R>(input: MobxPromiseInputUnion<R>): MobxPromiseUnionType<R>;
 };
 
